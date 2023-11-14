@@ -7,7 +7,6 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -15,7 +14,6 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.layout.*;
-import javafx.scene.input.KeyEvent; //you will need these!
 import javafx.scene.input.KeyCode;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -43,7 +41,7 @@ import java.nio.file.Path;
  *
  * You may need to manually set the quality on the video player to 1080p if it is too blurry by default.
  */
-public class AdventureGameView {
+public class ViewAdventureEditor {
 
     AdventureGame model; //model of the game
     Stage stage; //stage on which all is rendered
@@ -67,7 +65,7 @@ public class AdventureGameView {
      * __________________________
      * Initializes attributes
      */
-    public AdventureGameView(AdventureGame model, Stage stage) {
+    public ViewAdventureEditor(AdventureGame model, Stage stage) {
         this.model = model;
         this.stage = stage;
         intiUI();
