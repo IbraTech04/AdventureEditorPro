@@ -3,6 +3,7 @@ package AdventureModel;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.AbstractMap;
 
 public class AdventureSaver {
     private AdventureGame game; //the game to store
@@ -72,11 +73,19 @@ public class AdventureSaver {
         String objectFileName = this.adventureName + "/objects.txt";
         BufferedWriter buff = new BufferedWriter(new FileWriter(objectFileName));
 
-        for(var entry : this.game.getRooms().entrySet()) {
-            for(AdventureObject object : entry.getValue().objectsInRoom) {
-                buff.write(object.getName() + "\n");
-                buff.write(object.getDescription() + "\n");
-                buff.write(entry.getKey() + "\n");
+        var objectsToWrite = this.game.getRooms().entrySet().stream()
+                .flatMap(e -> e.getValue().objectsInRoom.stream()
+                        .map(o -> new AbstractMap.SimpleEntry<>(e.getKey(), o)))
+                .iterator();
+
+        while(objectsToWrite.hasNext()) {
+            var entry = objectsToWrite.next();
+            var object = entry.getValue();
+            buff.write(object.getName() + "\n");
+            buff.write(object.getDescription() + "\n");
+            buff.write(entry.getKey() + "\n");
+            // only add separator if there is more to write
+            if (objectsToWrite.hasNext()) {
                 buff.write("\n");
             }
         }
