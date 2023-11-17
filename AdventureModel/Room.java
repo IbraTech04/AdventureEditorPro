@@ -148,6 +148,15 @@ public class Room implements Serializable {
         return this.roomDescription.replace("\n", " ");
     }
 
+    /**
+     * Getter method for the description attribute.
+     *
+     * @return: description of the room
+     */
+    public String getUnsanitizedRoomDescription(){
+        return this.roomDescription;
+    }
+
 
     /**
      * Getter method for the name attribute.

@@ -8,7 +8,7 @@ import java.io.IOException;
  * Class AdventureLoader. Loads an adventure from files.
  */
 public class AdventureLoader {
-
+    public static final String DESCRIPTION_SEPARATOR = "-----";
     private AdventureGame game; //the game to return
     private String adventureName; //the name of the adventure
 
@@ -56,7 +56,7 @@ public class AdventureLoader {
             // now we need to get the description
             String roomDescription = "";
             String line = buff.readLine();
-            while (!line.equals("-----")) {
+            while (!line.equals(DESCRIPTION_SEPARATOR)) {
                 roomDescription += line + "\n";
                 line = buff.readLine();
             }
