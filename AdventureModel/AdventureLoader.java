@@ -75,11 +75,13 @@ public class AdventureLoader {
                     String[] blockedPath = dest.split("/");
                     String dest_part = blockedPath[0];
                     String object = blockedPath[1];
-                    Passage entry = new Passage(direction, dest_part, object);
-                    room.getMotionTable().addDirection(entry);
+                    // Get the room object which this room number represents
+                    Room destRoom = this.game.getRooms().get(Integer.parseInt(dest_part));
+                    room.getMotionTable().addRoom(direction, destRoom, object);
+
                 } else {
-                    Passage entry = new Passage(direction, dest);
-                    room.getMotionTable().addDirection(entry);
+                    Room destRoom = this.game.getRooms().get(Integer.parseInt(dest));
+                    room.getMotionTable().addRoom(direction, destRoom);
                 }
                 line = buff.readLine();
             }

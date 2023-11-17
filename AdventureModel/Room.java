@@ -2,15 +2,14 @@ package AdventureModel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
  * This class contains the information about a 
  * room in the Adventure Game.
  */
-public class Room implements Serializable {
-
-    private final String adventureName;
+public class Room {
     /**
      * The number of the room.
      */
@@ -27,9 +26,10 @@ public class Room implements Serializable {
     private String roomDescription;
 
     /**
-     * The passage table for the room.
+     * The passage cycle for the room.
      */
-    private PassageTable motionTable = new PassageTable();
+
+    private PassageNode passageCycle;
 
     /**
      * The list of objects in the room.
@@ -52,7 +52,6 @@ public class Room implements Serializable {
         this.roomName = roomName;
         this.roomNumber = roomNumber;
         this.roomDescription = roomDescription;
-        this.adventureName = adventureName;
         this.isVisited = false;
     }
 
@@ -76,7 +75,8 @@ public class Room implements Serializable {
      * @return delimited string of possible moves
      */
     public String getCommands() {
-        return motionTable.getDirection().stream().map(Passage::getDirection).distinct().collect(Collectors.joining(","));
+        List<String> directions = this.passageCycle.getDirections();
+        return String.join(", ", directions);
     }
 
     /**
@@ -115,19 +115,6 @@ public class Room implements Serializable {
      */
     public void visit(){
         isVisited = true;
-    }
-
-    /**
-     * Getter for returning an AdventureObject with a given name
-     *
-     * @param objectName: Object name to find in the room
-     * @return: AdventureObject
-     */
-    public AdventureObject getObject(String objectName){
-        for(int i = 0; i<objectsInRoom.size();i++){
-            if(this.objectsInRoom.get(i).getName().equals(objectName)) return this.objectsInRoom.get(i);
-        }
-        return null;
     }
 
     /**
@@ -180,12 +167,11 @@ public class Room implements Serializable {
 
     /**
      * Getter method for the motionTable attribute.
-     *
+     * @author Ibrahim Chehab (chehabib)
      * @return: motion table of the room
      */
-    public PassageTable getMotionTable(){
-        return this.motionTable;
+    public PassageNode getMotionTable(){
+        return this.passageCycle;
     }
-
 
 }
