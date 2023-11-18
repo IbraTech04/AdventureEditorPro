@@ -3,6 +3,8 @@ package AdventureModel;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class AdventureLoader. Loads an adventure from files.
@@ -44,6 +46,9 @@ public class AdventureLoader {
         String roomFileName = this.adventureName + "/rooms.txt";
         BufferedReader buff = new BufferedReader(new FileReader(roomFileName));
 
+        // We defer connection adding until after all rooms are loaded.
+        List<Runnable> connectionsToAdd = new ArrayList<>();
+
         while (buff.ready()) {
 
             String currRoom = buff.readLine(); // first line is the number of a room
@@ -75,19 +80,23 @@ public class AdventureLoader {
                     String[] blockedPath = dest.split("/");
                     String dest_part = blockedPath[0];
                     String object = blockedPath[1];
-                    // Get the room object which this room number represents
-                    Room destRoom = this.game.getRooms().get(Integer.parseInt(dest_part));
-                    room.getMotionTable().addRoom(direction, destRoom, object);
-
+                    connectionsToAdd.add(() -> {
+                        // Get the room object which this room number represents
+                        Room destRoom = this.game.getRooms().get(Integer.parseInt(dest_part));
+                        room.getPassages().put(new Connection(direction, object), destRoom);
+                    });
                 } else {
-                    Room destRoom = this.game.getRooms().get(Integer.parseInt(dest));
-                    room.getMotionTable().addRoom(direction, destRoom);
+                    connectionsToAdd.add(() -> {
+                        Room destRoom = this.game.getRooms().get(Integer.parseInt(dest));
+                        room.getPassages().put(new Connection(direction), destRoom);
+                    });
                 }
                 line = buff.readLine();
             }
             this.game.getRooms().put(room.getRoomNumber(), room);
         }
 
+        connectionsToAdd.forEach(Runnable::run);
     }
 
      /**

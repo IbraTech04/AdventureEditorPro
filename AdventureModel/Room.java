@@ -1,8 +1,7 @@
 package AdventureModel;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -29,7 +28,7 @@ public class Room {
      * The passage cycle for the room.
      */
 
-    private PassageNode passageCycle;
+    private Map<Connection, Room> passages;
 
     /**
      * The list of objects in the room.
@@ -53,6 +52,7 @@ public class Room {
         this.roomNumber = roomNumber;
         this.roomDescription = roomDescription;
         this.isVisited = false;
+        this.passages = new LinkedHashMap<>();
     }
 
 
@@ -68,6 +68,13 @@ public class Room {
     }
 
     /**
+     * Returns all directions it is possible to move in from this room.
+     */
+    public Collection<String> getAllDirections() {
+        return this.passages.keySet().stream().map(Connection::direction).collect(Collectors.toSet());
+    }
+
+    /**
      * Returns a comma delimited list of every
      * move that is possible from the given room,
      * e.g. "DOWN, UP, NORTH, SOUTH".
@@ -75,8 +82,7 @@ public class Room {
      * @return delimited string of possible moves
      */
     public String getCommands() {
-        List<String> directions = this.passageCycle.getDirections();
-        return String.join(", ", directions);
+        return String.join(", ", this.getAllDirections());
     }
 
     /**
@@ -116,6 +122,20 @@ public class Room {
     public void visit(){
         isVisited = true;
     }
+
+    /**
+     * Getter for returning an AdventureObject with a given name
+     *
+     * @param objectName: Object name to find in the room
+     * @return: AdventureObject
+     */
+    public AdventureObject getObject(String objectName){
+        for(int i = 0; i<objectsInRoom.size();i++){
+            if(this.objectsInRoom.get(i).getName().equals(objectName)) return this.objectsInRoom.get(i);
+        }
+        return null;
+    }
+
 
     /**
      * Getter method for the number attribute.
@@ -164,14 +184,7 @@ public class Room {
         return this.isVisited;
     }
 
-
-    /**
-     * Getter method for the motionTable attribute.
-     * @author Ibrahim Chehab (chehabib)
-     * @return: motion table of the room
-     */
-    public PassageNode getMotionTable(){
-        return this.passageCycle;
+    public Map<Connection, Room> getPassages() {
+        return this.passages;
     }
-
 }

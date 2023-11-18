@@ -53,15 +53,17 @@ public class AdventureSaver {
             buff.write(AdventureLoader.DESCRIPTION_SEPARATOR + "\n");
 
             // write connections
-            for(var passageEntry : room.getMotionTable().getPassageTable().entrySet()) {
+            for(var passageEntry : room.getPassages().entrySet()) {
                 String blockedSuffix;
-                var lock = passageEntry.getValue().getLock();
+                var lock = passageEntry.getKey().lock();
                 if(lock != null) {
                     blockedSuffix = "/" + lock;
                 } else {
                     blockedSuffix = "";
                 }
-                buff.write(String.format("%-10s %d%s\n", passageEntry.getKey(), passageEntry.getValue().getRoomNumber(), blockedSuffix));
+                var destination = passageEntry.getValue();
+                var destId = destination != null ? destination.getRoomNumber() : 0;
+                buff.write(String.format("%-10s %d%s\n", passageEntry.getKey().direction(), destId, blockedSuffix));
             }
             // write spacer
             buff.write("\n");
