@@ -84,6 +84,14 @@ public class PassageNode {
     }
 
     /**
+     * getRoomNumber
+     * @return the room number of this passage node
+     */
+    public int getRoomNumber() {
+        return roomNumber;
+    }
+
+    /**
      * getPassageTable
      * Returns a hashmap relating the directions to their respective Nodes
      * @author Ibrahim Chehab (chehabib)
