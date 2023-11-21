@@ -36,11 +36,10 @@ import java.util.Scanner;
  * Class AdventureGameView.
  * //TODO: Update all print statements to load their respective popups
  * //TODO: Update all buttons to have ARIA standards
- * //TODO: STYLING
  */
 public class ViewAdventureEditor {
 
-    AdventureGame model; //model of the game \\TODO: Remove when save and load are implemented
+    AdventureGame model; //model of the game //TODO: Remove when save and load are implemented
     Stage stage; //stage on which all is rendered
     BorderPane layout; //layout of the stage
     Button runButton, editButton, deleteButton, addGateButton, addObjectButton, addRoomButton, imageButton, visualizeButton;
@@ -48,6 +47,7 @@ public class ViewAdventureEditor {
     TextField nameField;
     TextArea descriptionField;
     CheckBox forcedCheckBox, startCheckBox, endCheckBox;
+    ScrollPane allRooms;
     String ImagePath, RoomName, RoomDescription;
     Boolean isStart, isEnd, isForced;
     ImageView roomImageView;
@@ -109,7 +109,7 @@ public class ViewAdventureEditor {
         //Create New Room Vbox
         HBox roomViewHbox = new HBox();
         roomViewHbox.setPadding(new Insets(5, 5, 5, 5));
-        roomViewHbox.setPrefWidth(190);
+        roomViewHbox.setPrefWidth(250);
         roomViewHbox.setPrefHeight(20);
         Label roomsLabel = new Label("All Rooms:  ");
         addRoomButton = new Button("Add Room");
@@ -119,9 +119,9 @@ public class ViewAdventureEditor {
         roomViewHbox.getChildren().addAll(roomsLabel, addRoomButton);
 
         //Create All Rooms Scroll Pane
-        ScrollPane allRooms = new ScrollPane();
+        allRooms = new ScrollPane();
         allRooms.setContent(createMiniRoomView());
-        allRooms.setPrefWidth(190);
+        allRooms.setPrefWidth(210);
         allRooms.setPrefHeight(1000);
 
         // Build Left Pane
@@ -150,7 +150,7 @@ public class ViewAdventureEditor {
         GridPane objectsGrid = new GridPane();
         GridPane.setColumnSpan(objectsGrid, 3);
         objectsPane.setContent(objectsGrid);
-        Label objectsLabel = new Label("Objects:");
+        Label objectsLabel = new Label("Objects in Current Room:");
 
         // Build Right Pane
         VBox rightPane = new VBox();
@@ -162,7 +162,8 @@ public class ViewAdventureEditor {
         layout.setTop(menuBar);
         layout.setLeft(leftPane);
         layout.setRight(rightPane);
-        var scene = new Scene( layout , 1200, 800);
+        var scene = new Scene( layout , 1100, 800);
+        scene.getStylesheets().add("views/styles/HighContrast.css");
         this.stage.setScene(scene);
         this.stage.setMaximized(true);
         this.stage.setResizable(true);
@@ -172,30 +173,31 @@ public class ViewAdventureEditor {
 
     /**
      * updateRoomView
-     * Updates the current room view with an empty room.
+     * Updates the current room view with an empty room. //TODO: Integrate loading of existing room
      */
     public void updateRoomView() {
         //Create Text Box's (GridPane 1)
         GridPane roomViewG1 = new GridPane();
-        roomViewG1.setPadding(new Insets(20, 20, 20, 20));
+        roomViewG1.setPadding(new Insets(10, 10, 10, 10));
         roomViewG1.setVgap(10);
         roomViewG1.setHgap(10);
         roomViewG1.setAlignment(Pos.CENTER);
-        roomViewG1.gridLinesVisibleProperty().setValue(true);
+        //roomViewG1.gridLinesVisibleProperty().setValue(true);
 
         //Add name label
         Label nameLabel = new Label("Room Name:");
         //Add name text field
         nameField = new TextField();
+        nameField.setPrefWidth(400);
         nameField.setPromptText("Choose a Room Name");
         nameField.setOnKeyPressed(e -> handleNameField(e));
         //Add description label
         Label descriptionLabel = new Label("Room Description:");
         //Add description text field
         descriptionField = new TextArea();
+        descriptionField.setPrefWidth(400);
+        descriptionField.setPrefHeight(200);
         descriptionField.setPromptText("Enter a Room Description");
-        descriptionField.setPrefWidth(250);
-        descriptionField.setPrefHeight(100);
         descriptionField.wrapTextProperty().setValue(true);
         descriptionField.setOnKeyPressed(e -> handleDescriptionField(e));
 
@@ -205,10 +207,10 @@ public class ViewAdventureEditor {
         roomViewG2.setVgap(20);
         roomViewG2.setHgap(20);
         roomViewG2.setAlignment(Pos.TOP_LEFT);
-        roomViewG2.gridLinesVisibleProperty().setValue(true);
+        //roomViewG2.gridLinesVisibleProperty().setValue(true);
 
         //Add Image View
-        Image defaultImageFile = new Image("assets/cherry-blossom.png");
+        Image defaultImageFile = new Image("assets/ahmed.jpg");
         roomImageView = new ImageView(defaultImageFile);
         roomImageView.setFitWidth(400);
         roomImageView.setFitHeight(200); //TODO: Make this change according to image size
@@ -220,11 +222,11 @@ public class ViewAdventureEditor {
 
         //Create Options Box's (GridPane 3)
         GridPane roomViewG3 = new GridPane();
-        roomViewG3.setPadding(new Insets(20, 20, 20, 20));
+        roomViewG3.setPadding(new Insets(10, 10, 10, 10));
         roomViewG3.setVgap(20);
         roomViewG3.setHgap(20);
         roomViewG3.setAlignment(Pos.TOP_LEFT);
-        roomViewG3.gridLinesVisibleProperty().setValue(true);
+        //roomViewG3.gridLinesVisibleProperty().setValue(true);
 
         //Add Object addition button
         addObjectButton = new Button("Add Object");
@@ -233,9 +235,9 @@ public class ViewAdventureEditor {
         addGateButton = new Button("Add Gate");
         addGateButton.setOnAction(e -> handleAddGateButton());
 
-        //Add Forced Check Boxd
+        //Add Forced Check Box
         forcedCheckBox = new CheckBox("Is Forced?");
-        isForced = false;
+        isForced = true;
         forcedCheckBox.setOnAction(e -> handleForcedCheckBox());
 
         //Add Start Check Box
@@ -246,13 +248,17 @@ public class ViewAdventureEditor {
 
         //Add End Check Box
         endCheckBox = new CheckBox("End");
-        isEnd = false;
+        isEnd = true;
         endCheckBox.setOnAction(e -> handleEndCheckBox());
 
         //-------------------------------------------------------------------------------------------------------------
         //Create Run Button
-        runButton = new Button("Run Game");
+        HBox runButtonBox = new HBox();
+        runButton = new Button("Run Game!");
         runButton.setOnAction(e -> handleRun());
+        runButtonBox.getChildren().add(runButton);
+        runButtonBox.setAlignment(Pos.CENTER);
+        runButtonBox.setPadding(new Insets(10, 10, 10, 10));
 
         //Add all elements to GridPanes
         roomViewG1.add(nameLabel, 0, 0);
@@ -269,15 +275,33 @@ public class ViewAdventureEditor {
 
         //Create New Room View using GridPanes
         GridPane roomView = new GridPane();
-        roomView.gridLinesVisibleProperty().setValue(true);
-        roomView.setAlignment(Pos.TOP_CENTER);
+        roomView.setPadding(new Insets(10, 10, 10, 10));
+        //roomView.gridLinesVisibleProperty().setValue(true);
+        roomView.setAlignment(Pos.CENTER);
         roomView.add(roomViewG1, 0, 0);
-        roomView.add(roomViewG2, 1, 0);
-        roomView.add(roomViewG3, 0, 1);
-        roomView.add(runButton, 1, 1);
+        roomView.add(roomViewG2, 0, 1);
+        roomView.add(roomViewG3, 0, 2);
+        roomView.add(runButtonBox, 0, 3);
         
         this.layout.setCenter(roomView);
     }
+
+    /**
+     * updateAllRooms
+     * Updates the allRooms ScrollPane anytime an edit is made, a room is added, or a room is deleted.
+     */
+    public void updateAllRooms() { //TODO: Integrate this method
+
+    }
+
+    /**
+     * updateAllRooms
+     * Updates the gatePane ScrollPane anytime an edit is made, a gate is added, or a gate is deleted.
+     */
+    public void updateGates() { //TODO: Integrate this method
+
+    }
+
 
     /**
      * createMiniRoomView
@@ -286,22 +310,28 @@ public class ViewAdventureEditor {
     public HBox createMiniRoomView() {
         //Create First Room Hbox
         HBox miniRoomView = new HBox();
-        //Add Delete and Edit Buttons
+
+        //Add Delete and Edit Buttons \\TODO: Allow these buttons to edit and delete a specific room
         VBox deleteEditButtons = new VBox();
+
+        //Create Delete Button
         Image trashIcon = new Image("assets/trash_icon.png");
         ImageView trashIconView = new ImageView(trashIcon);
-        trashIconView.setFitWidth(20);
-        trashIconView.setFitHeight(20);
-        Image editIcon = new Image("assets/edit_icon.png");
-        ImageView editIconView = new ImageView(editIcon);
-        editIconView.setFitWidth(20);
-        editIconView.setFitHeight(20);
+        trashIconView.setFitWidth(30);
+        trashIconView.setFitHeight(30);
         deleteButton = new Button();
         deleteButton.setOnAction(e -> handleDelete());
         deleteButton.setGraphic(trashIconView);
+
+        //Create Edit Button
+        Image editIcon = new Image("assets/edit_icon.png");
+        ImageView editIconView = new ImageView(editIcon);
+        editIconView.setFitWidth(30);
+        editIconView.setFitHeight(30);
         editButton = new Button();
         editButton.setOnAction(e -> handleEdit());
         editButton.setGraphic(editIconView);
+
         deleteEditButtons.getChildren().addAll(deleteButton, editButton);
 
 
@@ -324,14 +354,22 @@ public class ViewAdventureEditor {
             firstRoomInfo.getChildren().add(forcedLabel); //If the room is a forced room, add the forced label
         }
 
-        firstRoomInfo.setPrefHeight(40);
-        firstRoomInfo.setPrefWidth(150);
-        firstRoomInfo.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+        firstRoomInfo.setPrefHeight(60);
+        firstRoomInfo.setPrefWidth(190);
         firstRoomInfo.setAlignment(Pos.CENTER);
+        firstRoomInfo.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
 
         // Add Room Info Vbox to Hbox
         miniRoomView.getChildren().addAll(firstRoomInfo, deleteEditButtons);
         return miniRoomView;
+    }
+
+    /**
+     * createMiniGateView
+     * Creates a mini gate view for the current room to another room.
+     */
+    public HBox createMiniGateView() { //TODO: Implement this method
+        return new HBox();
     }
 
 
