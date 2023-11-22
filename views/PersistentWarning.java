@@ -1,9 +1,9 @@
 package views;
 
-public class OptionalWarning implements WarningInterface{
+public class PersistentWarning implements WarningInterface{
     ViewAdventureEditor adventureEditorView;
 
-    public OptionalWarning(ViewAdventureEditor adventureEdiView){
+    public PersistentWarning(ViewAdventureEditor adventureEdiView){
         this.adventureEditorView = adventureEdiView;
 
     }
