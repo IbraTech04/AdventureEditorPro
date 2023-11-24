@@ -1,16 +1,14 @@
 package AdventureModel;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * This class contains the information about a 
  * room in the Adventure Game.
  */
-public class Room implements Serializable {
-
-    private final String adventureName;
+public class Room {
     /**
      * The number of the room.
      */
@@ -27,9 +25,10 @@ public class Room implements Serializable {
     private String roomDescription;
 
     /**
-     * The passage table for the room.
+     * The passage cycle for the room.
      */
-    private PassageTable motionTable = new PassageTable();
+
+    private Map<Connection, Room> passages;
 
     /**
      * The list of objects in the room.
@@ -52,8 +51,8 @@ public class Room implements Serializable {
         this.roomName = roomName;
         this.roomNumber = roomNumber;
         this.roomDescription = roomDescription;
-        this.adventureName = adventureName;
         this.isVisited = false;
+        this.passages = new LinkedHashMap<>();
     }
 
 
@@ -69,6 +68,13 @@ public class Room implements Serializable {
     }
 
     /**
+     * Returns all directions it is possible to move in from this room.
+     */
+    public Collection<String> getAllDirections() {
+        return this.passages.keySet().stream().map(Connection::direction).collect(Collectors.toSet());
+    }
+
+    /**
      * Returns a comma delimited list of every
      * move that is possible from the given room,
      * e.g. "DOWN, UP, NORTH, SOUTH".
@@ -76,7 +82,7 @@ public class Room implements Serializable {
      * @return delimited string of possible moves
      */
     public String getCommands() {
-        return motionTable.getDirection().stream().map(Passage::getDirection).distinct().collect(Collectors.joining(","));
+        return String.join(", ", this.getAllDirections());
     }
 
     /**
@@ -130,6 +136,7 @@ public class Room implements Serializable {
         return null;
     }
 
+
     /**
      * Getter method for the number attribute.
      *
@@ -146,6 +153,15 @@ public class Room implements Serializable {
      */
     public String getRoomDescription(){
         return this.roomDescription.replace("\n", " ");
+    }
+
+    /**
+     * Getter method for the description attribute.
+     *
+     * @return: description of the room
+     */
+    public String getUnsanitizedRoomDescription(){
+        return this.roomDescription;
     }
 
 
@@ -168,15 +184,7 @@ public class Room implements Serializable {
         return this.isVisited;
     }
 
-
-    /**
-     * Getter method for the motionTable attribute.
-     *
-     * @return: motion table of the room
-     */
-    public PassageTable getMotionTable(){
-        return this.motionTable;
+    public Map<Connection, Room> getPassages() {
+        return this.passages;
     }
-
-
 }

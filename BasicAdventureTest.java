@@ -2,6 +2,7 @@
 import java.io.IOException;
 
 import AdventureModel.AdventureGame;
+import AdventureModel.AdventureSaver;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,5 +22,12 @@ public class BasicAdventureTest {
         assertEquals("a water bird", objects);
     }
 
+    @Test
+    void testLoadAndSave() throws IOException {
+        AdventureGame game = new AdventureGame("TinyGame");
+        AdventureSaver saver = new AdventureSaver(game, "Games/TinyGame_Saved");
+        saver.saveGame();
+        // TODO: diff saved game against original game automatically
+    }
 
 }

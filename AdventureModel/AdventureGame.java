@@ -101,24 +101,24 @@ public class AdventureGame implements Serializable {
     public boolean movePlayer(String direction) {
 
         direction = direction.toUpperCase();
-        PassageTable motionTable = this.player.getCurrentRoom().getMotionTable(); //where can we move?
-        if (!motionTable.optionExists(direction)) return true; //no move
+        var motionTable = this.player.getCurrentRoom().getPassages(); //where can we move?
+        if (!this.player.getCurrentRoom().getAllDirections().contains(direction)) return true; //no move
 
-        ArrayList<Passage> possibilities = new ArrayList<>();
-        for (Passage entry : motionTable.getDirection()) {
-            if (entry.getDirection().equals(direction)) { //this is the right direction
+        ArrayList<Map.Entry<Connection, Room>> possibilities = new ArrayList<>();
+        for (var entry : motionTable.entrySet()) {
+            if (entry.getKey().direction().equals(direction)) { //this is the right direction
                 possibilities.add(entry); // are there possibilities?
             }
         }
 
         //try the blocked passages first
-        Passage chosen = null;
-        for (Passage entry : possibilities) {
-            System.out.println(entry.getIsBlocked());
-            System.out.println(entry.getKeyName());
+        Map.Entry<Connection, Room> chosen = null;
+        for (var entry : possibilities) {
+            System.out.println(entry.getKey().lock() != null);
+            System.out.println(entry.getKey().lock());
 
-            if (chosen == null && entry.getIsBlocked()) {
-                if (this.player.getInventory().contains(entry.getKeyName())) {
+            if (chosen == null && entry.getKey().lock() != null) {
+                if (this.player.getInventory().contains(entry.getKey().lock())) {
                     chosen = entry; //we can make it through, given our stuff
                     break;
                 }
@@ -127,11 +127,10 @@ public class AdventureGame implements Serializable {
 
         if (chosen == null) return true; //doh, we just can't move.
 
-        int roomNumber = chosen.getDestinationRoom();
-        Room room = this.rooms.get(roomNumber);
+        Room room = chosen.getValue();
         this.player.setCurrentRoom(room);
 
-        return !this.player.getCurrentRoom().getMotionTable().getDirection().get(0).getDirection().equals("FORCED");
+        return !chosen.getKey().direction().equals("FORCED");
     }
 
     /**
@@ -144,11 +143,12 @@ public class AdventureGame implements Serializable {
 
         String[] inputArray = tokenize(command); //look up synonyms
 
-        PassageTable motionTable = this.player.getCurrentRoom().getMotionTable(); //where can we move?
+        var room = this.player.getCurrentRoom(); //where can we move?
 
-        if (motionTable.optionExists(inputArray[0])) {
+        if (room.getAllDirections().contains(inputArray[0])) {
             if (!movePlayer(inputArray[0])) {
-                if (this.player.getCurrentRoom().getMotionTable().getDirection().get(0).getDestinationRoom() == 0)
+                // null destination = room 0, i.e. dead
+                if (this.player.getCurrentRoom().getPassages().entrySet().iterator().next() == null)
                     return "GAME OVER";
                 else return "FORCED";
             } //something is up here! We are dead or we won.

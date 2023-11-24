@@ -3,12 +3,14 @@ package AdventureModel;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class AdventureLoader. Loads an adventure from files.
  */
 public class AdventureLoader {
-
+    public static final String DESCRIPTION_SEPARATOR = "-----";
     private AdventureGame game; //the game to return
     private String adventureName; //the name of the adventure
 
@@ -44,6 +46,9 @@ public class AdventureLoader {
         String roomFileName = this.adventureName + "/rooms.txt";
         BufferedReader buff = new BufferedReader(new FileReader(roomFileName));
 
+        // We defer connection adding until after all rooms are loaded.
+        List<Runnable> connectionsToAdd = new ArrayList<>();
+
         while (buff.ready()) {
 
             String currRoom = buff.readLine(); // first line is the number of a room
@@ -56,7 +61,7 @@ public class AdventureLoader {
             // now we need to get the description
             String roomDescription = "";
             String line = buff.readLine();
-            while (!line.equals("-----")) {
+            while (!line.equals(DESCRIPTION_SEPARATOR)) {
                 roomDescription += line + "\n";
                 line = buff.readLine();
             }
@@ -75,17 +80,23 @@ public class AdventureLoader {
                     String[] blockedPath = dest.split("/");
                     String dest_part = blockedPath[0];
                     String object = blockedPath[1];
-                    Passage entry = new Passage(direction, dest_part, object);
-                    room.getMotionTable().addDirection(entry);
+                    connectionsToAdd.add(() -> {
+                        // Get the room object which this room number represents
+                        Room destRoom = this.game.getRooms().get(Integer.parseInt(dest_part));
+                        room.getPassages().put(new Connection(direction, object), destRoom);
+                    });
                 } else {
-                    Passage entry = new Passage(direction, dest);
-                    room.getMotionTable().addDirection(entry);
+                    connectionsToAdd.add(() -> {
+                        Room destRoom = this.game.getRooms().get(Integer.parseInt(dest));
+                        room.getPassages().put(new Connection(direction), destRoom);
+                    });
                 }
                 line = buff.readLine();
             }
             this.game.getRooms().put(room.getRoomNumber(), room);
         }
 
+        connectionsToAdd.forEach(Runnable::run);
     }
 
      /**
