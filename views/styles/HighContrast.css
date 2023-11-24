@@ -1,0 +1,16 @@
+.root{
+    -fx-background-color: #f3dff1;
+    -fx-font-size: 20px;
+    -fx-font-style: italic;
+}
+.button{
+    -fx-background-color: #cf9fca;
+    -fx-background-radius: 0
+}
+.scroll-pane{
+    -fx-background-color: #b96270;
+}
+.text-field{
+    -fx-border-color: #b96270;
+}
+.
