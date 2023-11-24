@@ -1,7 +1,7 @@
 import AdventureModel.AdventureGame;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import views.AdventureGameView;
+import views.ViewAdventureEditor;
 // Ibra was here :-P
 import java.io.IOException;
 
@@ -11,7 +11,7 @@ import java.io.IOException;
 public class AdventureGameApp extends  Application {
 
     AdventureGame model;
-    AdventureGameView view;
+    ViewAdventureEditor view;
 
     public static void main(String[] args) {
         launch(args);
@@ -25,7 +25,7 @@ public class AdventureGameApp extends  Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         this.model = new AdventureGame("TinyGame"); //change the name of the game if you want to try something bigger!
-        this.view = new AdventureGameView(model, primaryStage);
+        this.view = new ViewAdventureEditor(model, primaryStage);
     }
 
 }

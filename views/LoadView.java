@@ -17,7 +17,6 @@ import java.io.*;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.stream.Stream;
 
 
 /**
@@ -27,7 +26,7 @@ import java.util.stream.Stream;
  */
 public class LoadView {
 
-    private AdventureGameView adventureGameView;
+    private ViewAdventureEditor editorView;
     private Label selectGameLabel;
     private Button selectGameButton;
     private Button closeWindowButton;
@@ -35,17 +34,17 @@ public class LoadView {
     private ListView<String> GameList;
     private String filename = null;
 
-    public LoadView(AdventureGameView adventureGameView){
+    public LoadView(ViewAdventureEditor editorView){
 
         //note that the buttons in this view are not accessible!!
-        this.adventureGameView = adventureGameView;
+        this.editorView = editorView;
         selectGameLabel = new Label(String.format(""));
 
         GameList = new ListView<>(); //to hold all the file names
 
         final Stage dialog = new Stage(); //dialogue box
         dialog.initModality(Modality.APPLICATION_MODAL);
-        dialog.initOwner(adventureGameView.stage);
+        dialog.initOwner(editorView.stage);
 
         VBox dialogVbox = new VBox(20);
         dialogVbox.setPadding(new Insets(20, 20, 20, 20));
@@ -56,7 +55,7 @@ public class LoadView {
         getFiles(GameList); //get files for file selector
         selectGameButton = new Button("Change Game");
         selectGameButton.setId("ChangeGame"); // DO NOT MODIFY ID
-        AdventureGameView.makeButtonAccessible(selectGameButton, "select game", "This is the button to select a game", "Use this button to indicate a game file you would like to load.");
+        ViewAdventureEditor.makeButtonAccessible(selectGameButton, "select game", "This is the button to select a game", "Use this button to indicate a game file you would like to load.");
 
         closeWindowButton = new Button("Close Window");
         closeWindowButton.setId("closeWindowButton"); // DO NOT MODIFY ID
@@ -64,7 +63,7 @@ public class LoadView {
         closeWindowButton.setPrefSize(200, 50);
         closeWindowButton.setFont(new Font(16));
         closeWindowButton.setOnAction(e -> dialog.close());
-        AdventureGameView.makeButtonAccessible(closeWindowButton, "close window", "This is a button to close the load game window", "Use this button to close the load game window.");
+        ViewAdventureEditor.makeButtonAccessible(closeWindowButton, "close window", "This is a button to close the load game window", "Use this button to close the load game window.");
 
         //on selection, do something
         selectGameButton.setOnAction(e -> {
@@ -122,16 +121,16 @@ public class LoadView {
     private void selectGame(Label selectGameLabel, ListView<String> GameList) throws IOException {
         // TODO throw the IOException, or capture it?
         String newGameFile = GameList.getFocusModel().getFocusedItem();
-        this.adventureGameView.stopArticulation();
+        //this.editorView.stopArticulation();
         try {
-            this.adventureGameView.model = loadGame(newGameFile);
+            this.editorView.model = loadGame(newGameFile);
             selectGameLabel.setText(newGameFile);
         } catch(Exception e) {
             selectGameLabel.setText("Error loading saved game. New game started.");
-            this.adventureGameView.model.setUpGame();
+            this.editorView.model.setUpGame();
         }
-        this.adventureGameView.updateItems();
-        this.adventureGameView.updateScene("");
+        //this.editorView.updateItems();
+        //this.editorView.updateScene("");
     }
 
     /**
