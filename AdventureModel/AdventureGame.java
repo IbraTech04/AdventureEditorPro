@@ -219,6 +219,17 @@ public class AdventureGame implements Serializable {
     }
 
     /**
+     * addRoom
+     * __________________________
+     * Adds a room to the game
+     * @param room room to add
+     * @author Ibrahim Chehab
+     */
+    public void addRoom(Room room) {
+        this.rooms.put(room.getRoomNumber(), room);
+    }
+
+    /**
      * getSynonyms
      * __________________________
      * Getter method for synonyms 
