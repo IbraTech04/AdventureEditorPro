@@ -341,10 +341,7 @@ public class ViewAdventureEditor {
 
             // Create Room Information Vbox
             VBox firstRoomInfo = new VBox();
-            if (this.RoomName == null) { //If the room has no name, set the name to "Unnamed Room"
-                this.RoomName = "Unnamed Room";
-            }
-            Label firstRoomLabel = new Label(RoomName);
+            Label firstRoomLabel = new Label(room.getRoomName());
             Label startLabel = new Label("Starting Room");
             Label endLabel = new Label("Ending Room");
             Label forcedLabel = new Label("Forced Room");
@@ -354,7 +351,7 @@ public class ViewAdventureEditor {
                 firstRoomInfo.getChildren().add(startLabel); //If the room is the start room, add the start label
             } else if (isEnd) {
                 firstRoomInfo.getChildren().add(endLabel); //If the room is the end room, add the end label
-            } else {
+            } else if (isForced) {
                 firstRoomInfo.getChildren().add(forcedLabel); //If the room is a forced room, add the forced label
             }
 
