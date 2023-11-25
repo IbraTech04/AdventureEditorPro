@@ -1,6 +1,7 @@
 package AdventureController;
 
 import AdventureModel.AdventureGame;
+import AdventureModel.Connection;
 import AdventureModel.Room;
 import views.ViewAdventureEditor;
 
@@ -50,6 +51,10 @@ public class Controller {
     }
 
     public void deleteRoom(Room room) {
+        // If the room ID is 1, raise an error (you can't delete the first room)
+        if(room.getRoomNumber() == 1) {
+            throw new IllegalArgumentException("You can't delete the starting room!");
+        }
         model.deleteRoom(room);
         view.updateAllRooms(getAllRooms());
     }
@@ -58,12 +63,42 @@ public class Controller {
      * addGateToRoom
      * __________________________
      * Adds a passage from room1 to room2 in the specified direction
-     * @param room1
-     * @param room2
-     * @param direction
-     * @author Ibrahim Chehab
+     * @param room1 Room to add passage to
+     * @param room2 Destination room
+     * @param direction Direction of passage
      */
     public void addGateToRoom(Room room1, Room room2, String direction) {
+        this.addGateToRoom(room1, room2, direction, null);
+    }
 
+    /**
+     * addGateToRoom
+     * __________________________
+     * Adds a passage from room1 to room2 in the specified direction
+     * @param room1 Room to add passage to
+     * @param room2 Destination room
+     * @param direction Direction of passage
+     * @param object Object to block passage (null if no object)
+     * @author Ibrahim Chehab
+     */
+    public void addGateToRoom(Room room1, Room room2, String direction, String object) {
+        // Step 1: Add the gate to the room
+        room1.addGate(direction, object, room2);
+        // Step 2: Update the view
+        view.updateAllRooms(getAllRooms());
+    }
+
+    /**
+     * deleteGateFromRoom
+     * __________________________
+     * Deletes a passage from room1 to room2 in the specified direction
+     * @param room1 Room to delete passage from
+     * @param pair Connection object containing the room and direction
+     */
+    public void deleteGateFromRoom(Room room1, Connection pair) {
+        // Step 1: Delete the gate from the room
+        room1.getPassages().remove(pair);
+        // Step 2: Update the view
+        view.updateAllRooms(getAllRooms());
     }
 }
