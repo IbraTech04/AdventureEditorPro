@@ -3,6 +3,7 @@ package views;
 import AdventureController.Controller;
 import AdventureModel.AdventureGame;
 import AdventureModel.AdventureObject;
+import AdventureModel.Connection;
 import AdventureModel.Room;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
@@ -31,10 +32,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Class AdventureGameView.
@@ -55,6 +53,8 @@ public class ViewAdventureEditor {
     String ImagePath, RoomName, RoomDescription;
     Boolean isStart, isEnd, isForced;
     ImageView roomImageView;
+
+    ScrollPane gatePane, objectsPane;
 
     Room currentlySelectedRoom;
 
@@ -144,7 +144,7 @@ public class ViewAdventureEditor {
 
         //-------------------------------------------------------------------------------------------------------------
         //Create Gate Scroll Pane and Label
-        ScrollPane gatePane = new ScrollPane();
+        gatePane = new ScrollPane();
         gatePane.setPrefWidth(190);
         gatePane.setPrefHeight(500);
         Label gatesLabel = new Label("Gates to Current Room:  ");
@@ -157,7 +157,7 @@ public class ViewAdventureEditor {
         gatesLabelButton.getChildren().addAll(gatesLabel, visualizeButton);
 
         //Create Objects Scroll Pane
-        ScrollPane objectsPane = new ScrollPane();
+        objectsPane = new ScrollPane();
         objectsPane.setPrefWidth(190);
         objectsPane.setPrefHeight(400);
         GridPane objectsGrid = new GridPane();
@@ -307,6 +307,8 @@ public class ViewAdventureEditor {
         roomView.add(runButtonBox, 0, 3);
         
         this.layout.setCenter(roomView);
+
+        updateGates();
     }
 
     /**
@@ -322,7 +324,8 @@ public class ViewAdventureEditor {
      * Updates the gatePane ScrollPane anytime an edit is made, a gate is added, or a gate is deleted.
      */
     public void updateGates() { //TODO: Integrate this method
-
+        VBox gateList = new VBox();
+        gatePane.setContent(gateList);
     }
 
 
