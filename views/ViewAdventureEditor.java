@@ -55,7 +55,8 @@ public class ViewAdventureEditor {
     String ImagePath, RoomName, RoomDescription;
     Boolean isStart, isEnd, isForced;
     ImageView roomImageView;
-    ArrayList<HBox> roomsList;
+
+    Room currentlySelectedRoom;
 
 
     /**
@@ -188,6 +189,10 @@ public class ViewAdventureEditor {
      * Updates the current room view with an empty room. //TODO: Integrate loading of existing room
      */
     public void updateRoomView() {
+        if(currentlySelectedRoom == null) {
+            this.layout.setCenter(null);
+            return;
+        }
         //Create Text Box's (GridPane 1)
         GridPane roomViewG1 = new GridPane();
         roomViewG1.setPadding(new Insets(10, 10, 10, 10));
@@ -202,7 +207,10 @@ public class ViewAdventureEditor {
         nameField = new TextField();
         nameField.setPrefWidth(400);
         nameField.setPromptText("Choose a Room Name");
-        nameField.setOnKeyPressed(e -> handleNameField(e));
+        nameField.textProperty().addListener((observable, old, newVal) -> {
+            controller.updateRoomName(currentlySelectedRoom, newVal);
+        });
+        nameField.setText(currentlySelectedRoom.getRoomName());
         //Add description label
         Label descriptionLabel = new Label("Room Description:");
         //Add description text field
@@ -211,7 +219,10 @@ public class ViewAdventureEditor {
         descriptionField.setPrefHeight(200);
         descriptionField.setPromptText("Enter a Room Description");
         descriptionField.wrapTextProperty().setValue(true);
-        descriptionField.setOnKeyPressed(e -> handleDescriptionField(e));
+        descriptionField.textProperty().addListener((observable, old, newVal) -> {
+            controller.updateRoomDescription(currentlySelectedRoom, newVal);
+        });
+        descriptionField.setText(currentlySelectedRoom.getUnsanitizedRoomDescription());
 
         //Add Default Image View (GridPane 2)
         GridPane roomViewG2 = new GridPane();
@@ -334,6 +345,7 @@ public class ViewAdventureEditor {
             trashIconView.setFitWidth(30);
             trashIconView.setFitHeight(30);
             Button deleteButton = new Button();
+            // TODO: change currently selected room upon deletion if needed
             deleteButton.setOnAction(e -> controller.deleteRoom(room));
             deleteButton.setGraphic(trashIconView);
 
@@ -371,6 +383,11 @@ public class ViewAdventureEditor {
             firstRoomInfo.setPrefWidth(190);
             firstRoomInfo.setAlignment(Pos.CENTER);
             firstRoomInfo.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+
+            firstRoomInfo.setOnMouseClicked(e -> {
+                currentlySelectedRoom = room;
+                updateRoomView();
+            });
 
             // Add Room Info Vbox to Hbox
             miniRoomView.getChildren().addAll(firstRoomInfo, deleteEditButtons);

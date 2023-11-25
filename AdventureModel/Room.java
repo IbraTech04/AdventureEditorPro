@@ -196,4 +196,11 @@ public class Room {
         this.passages.remove(new Connection(direction, object));
     }
 
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
+    }
+
+    public void setRoomDescription(String roomDescription) {
+        this.roomDescription = roomDescription;
+    }
 }
