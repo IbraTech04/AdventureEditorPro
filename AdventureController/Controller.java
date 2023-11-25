@@ -5,6 +5,7 @@ import AdventureModel.Room;
 import views.ViewAdventureEditor;
 
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -22,6 +23,9 @@ public class Controller {
     public Controller(AdventureGame model, ViewAdventureEditor view) {
         this.model = model;
         this.view = view;
+        this.view.setController(this);
+        // Do initial updates
+        this.view.updateAllRooms(getAllRooms());
     }
 
     /**
@@ -30,17 +34,19 @@ public class Controller {
      * @return List<Room></Rooms> a list of all the rooms in the game
      *
      */
-    private List<Room> getAllRooms() {
-        return model.getRooms().values().stream().toList();
+    private Collection<Room> getAllRooms() {
+        return model.getRooms().values();
     }
 
     public void addRoom(){
         // Step 1: Find the max ID of the rooms, and add one to it to get the new room ID
-        List<Room> rooms = getAllRooms();
-        int maxID = rooms.stream().mapToInt(Room::getRoomNumber).max().orElse(0);
-        Room room = new Room("New Room (" + maxID + ")", maxID, "", "");
+        Collection<Room> rooms = getAllRooms();
+        int newID = rooms.stream().mapToInt(Room::getRoomNumber).max().orElse(0) + 1;
+        // Step 2: Actually make the room
+        Room room = new Room("New Room (" + newID + ")", newID, "", "");
         model.addRoom(room);
-        //TODO: Update View
+        // Step 3: Update the view
+        view.updateAllRooms(rooms);
     }
 
     /**

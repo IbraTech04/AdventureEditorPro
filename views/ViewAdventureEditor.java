@@ -1,5 +1,6 @@
 package views;
 
+import AdventureController.Controller;
 import AdventureModel.AdventureGame;
 import AdventureModel.AdventureObject;
 import AdventureModel.Room;
@@ -31,6 +32,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Scanner;
 
@@ -40,7 +42,7 @@ import java.util.Scanner;
  * //TODO: Update all buttons to have ARIA standards
  */
 public class ViewAdventureEditor {
-
+    Controller controller;
     AdventureGame model; //model of the game //TODO: Remove when save and load are implemented
     Stage stage; //stage on which all is rendered
     BorderPane layout; //layout of the stage
@@ -65,6 +67,12 @@ public class ViewAdventureEditor {
         this.model = model; //TODO: Remove when save and load are implemented
         this.stage = stage;
         intiUI();
+    }
+
+    public void setController(Controller controller) {
+        if(this.controller != null)
+            throw new IllegalStateException("Already attached a controller");
+        this.controller = controller;
     }
 
     /**
@@ -115,7 +123,9 @@ public class ViewAdventureEditor {
         roomViewHbox.setPrefHeight(20);
         Label roomsLabel = new Label("All Rooms:  ");
         addRoomButton = new Button("Add Room");
-        addRoomButton.setOnAction(e -> handleAddRoomButton());
+        addRoomButton.setOnAction(e -> {
+            controller.addRoom();
+        });
         addRoomButton.setAlignment(Pos.TOP_RIGHT);
         roomsLabel.setAlignment(Pos.TOP_LEFT);
         roomViewHbox.getChildren().addAll(roomsLabel, addRoomButton);
@@ -292,7 +302,7 @@ public class ViewAdventureEditor {
      * updateAllRooms
      * Updates the allRooms ScrollPane anytime an edit is made, a room is added, or a room is deleted.
      */
-    public void updateAllRooms(List<Room> rooms) { //TODO: Integrate this method
+    public void updateAllRooms(Collection<Room> rooms) { //TODO: Integrate this method
         allRooms.setContent(createMiniRoomView(rooms));
     }
 
@@ -309,7 +319,7 @@ public class ViewAdventureEditor {
      * createMiniRoomView
      * Creates a mini room view for the current room in the main room view.
      */
-    private Node createMiniRoomView(List<Room> rooms) {
+    private Node createMiniRoomView(Collection<Room> rooms) {
         VBox roomList = new VBox();
         for(Room room : rooms) {
             //Create First Room Hbox
@@ -347,6 +357,7 @@ public class ViewAdventureEditor {
             Label forcedLabel = new Label("Forced Room");
             firstRoomInfo.getChildren().add(firstRoomLabel);
 
+            /*
             if (isStart) {
                 firstRoomInfo.getChildren().add(startLabel); //If the room is the start room, add the start label
             } else if (isEnd) {
@@ -354,6 +365,7 @@ public class ViewAdventureEditor {
             } else if (isForced) {
                 firstRoomInfo.getChildren().add(forcedLabel); //If the room is a forced room, add the forced label
             }
+             */
 
             firstRoomInfo.setPrefHeight(60);
             firstRoomInfo.setPrefWidth(190);
