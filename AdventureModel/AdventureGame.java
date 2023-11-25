@@ -229,6 +229,23 @@ public class AdventureGame implements Serializable {
         this.rooms.put(room.getRoomNumber(), room);
     }
 
+
+    /**
+     * deleteRoom
+     * __________________________
+     * Removes a room to the game
+     * @param room room to remove
+     * @author Ibrahim Chehab
+     */
+    public void deleteRoom(Room room) {
+        if(rooms.remove(room.getRoomNumber()) == null) {
+            throw new IllegalStateException("Schrodinger's Room has been discovered!");
+        }
+        for(Room otherRoom : rooms.values()) {
+            otherRoom.getPassages().values().remove(otherRoom);
+        }
+    }
+
     /**
      * getSynonyms
      * __________________________

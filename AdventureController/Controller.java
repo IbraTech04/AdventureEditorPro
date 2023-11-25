@@ -49,6 +49,11 @@ public class Controller {
         view.updateAllRooms(rooms);
     }
 
+    public void deleteRoom(Room room) {
+        model.deleteRoom(room);
+        view.updateAllRooms(getAllRooms());
+    }
+
     /**
      * addGateToRoom
      * __________________________

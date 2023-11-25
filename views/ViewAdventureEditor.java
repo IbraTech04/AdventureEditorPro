@@ -334,7 +334,7 @@ public class ViewAdventureEditor {
             trashIconView.setFitWidth(30);
             trashIconView.setFitHeight(30);
             Button deleteButton = new Button();
-            deleteButton.setOnAction(e -> handleDelete());
+            deleteButton.setOnAction(e -> controller.deleteRoom(room));
             deleteButton.setGraphic(trashIconView);
 
             //Create Edit Button
