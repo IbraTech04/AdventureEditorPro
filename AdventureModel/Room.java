@@ -187,4 +187,13 @@ public class Room {
     public Map<Connection, Room> getPassages() {
         return this.passages;
     }
+
+    public void addGate(String direction, String object, Room room) {
+        this.passages.put(new Connection(direction, object), room);
+    }
+
+    public void deleteGate(String direction, String object) {
+        this.passages.remove(new Connection(direction, object));
+    }
+
 }

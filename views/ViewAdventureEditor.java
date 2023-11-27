@@ -1,7 +1,9 @@
 package views;
 
+import AdventureController.Controller;
 import AdventureModel.AdventureGame;
 import AdventureModel.AdventureObject;
+import AdventureModel.Room;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -30,6 +32,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -38,11 +42,11 @@ import java.util.Scanner;
  * //TODO: Update all buttons to have ARIA standards
  */
 public class ViewAdventureEditor {
-
+    Controller controller;
     AdventureGame model; //model of the game //TODO: Remove when save and load are implemented
     Stage stage; //stage on which all is rendered
     BorderPane layout; //layout of the stage
-    Button runButton, editButton, deleteButton, addGateButton, addObjectButton, addRoomButton, imageButton, visualizeButton;
+    Button runButton, addGateButton, addObjectButton, addRoomButton, imageButton, visualizeButton;
     Label imageLabel;
     TextField nameField;
     TextArea descriptionField;
@@ -63,6 +67,12 @@ public class ViewAdventureEditor {
         this.model = model; //TODO: Remove when save and load are implemented
         this.stage = stage;
         intiUI();
+    }
+
+    public void setController(Controller controller) {
+        if(this.controller != null)
+            throw new IllegalStateException("Already attached a controller");
+        this.controller = controller;
     }
 
     /**
@@ -113,14 +123,16 @@ public class ViewAdventureEditor {
         roomViewHbox.setPrefHeight(20);
         Label roomsLabel = new Label("All Rooms:  ");
         addRoomButton = new Button("Add Room");
-        addRoomButton.setOnAction(e -> handleAddRoomButton());
+        addRoomButton.setOnAction(e -> {
+            controller.addRoom();
+        });
         addRoomButton.setAlignment(Pos.TOP_RIGHT);
         roomsLabel.setAlignment(Pos.TOP_LEFT);
         roomViewHbox.getChildren().addAll(roomsLabel, addRoomButton);
 
         //Create All Rooms Scroll Pane
         allRooms = new ScrollPane();
-        allRooms.setContent(createMiniRoomView());
+        allRooms.setContent(createMiniRoomView(List.of()));
         allRooms.setPrefWidth(210);
         allRooms.setPrefHeight(1000);
 
@@ -290,8 +302,8 @@ public class ViewAdventureEditor {
      * updateAllRooms
      * Updates the allRooms ScrollPane anytime an edit is made, a room is added, or a room is deleted.
      */
-    public void updateAllRooms() { //TODO: Integrate this method
-
+    public void updateAllRooms(Collection<Room> rooms) { //TODO: Integrate this method
+        allRooms.setContent(createMiniRoomView(rooms));
     }
 
     /**
@@ -307,61 +319,66 @@ public class ViewAdventureEditor {
      * createMiniRoomView
      * Creates a mini room view for the current room in the main room view.
      */
-    public HBox createMiniRoomView() {
-        //Create First Room Hbox
-        HBox miniRoomView = new HBox();
+    private Node createMiniRoomView(Collection<Room> rooms) {
+        VBox roomList = new VBox();
+        for(Room room : rooms) {
+            //Create First Room Hbox
+            HBox miniRoomView = new HBox();
 
-        //Add Delete and Edit Buttons \\TODO: Allow these buttons to edit and delete a specific room
-        VBox deleteEditButtons = new VBox();
+            //Add Delete and Edit Buttons \\TODO: Allow these buttons to edit and delete a specific room
+            VBox deleteEditButtons = new VBox();
 
-        //Create Delete Button
-        Image trashIcon = new Image("assets/trash_icon.png");
-        ImageView trashIconView = new ImageView(trashIcon);
-        trashIconView.setFitWidth(30);
-        trashIconView.setFitHeight(30);
-        deleteButton = new Button();
-        deleteButton.setOnAction(e -> handleDelete());
-        deleteButton.setGraphic(trashIconView);
+            //Create Delete Button
+            Image trashIcon = new Image("assets/trash_icon.png");
+            ImageView trashIconView = new ImageView(trashIcon);
+            trashIconView.setFitWidth(30);
+            trashIconView.setFitHeight(30);
+            Button deleteButton = new Button();
+            deleteButton.setOnAction(e -> controller.deleteRoom(room));
+            deleteButton.setGraphic(trashIconView);
 
-        //Create Edit Button
-        Image editIcon = new Image("assets/edit_icon.png");
-        ImageView editIconView = new ImageView(editIcon);
-        editIconView.setFitWidth(30);
-        editIconView.setFitHeight(30);
-        editButton = new Button();
-        editButton.setOnAction(e -> handleEdit());
-        editButton.setGraphic(editIconView);
+            //Create Edit Button
+            Image editIcon = new Image("assets/edit_icon.png");
+            ImageView editIconView = new ImageView(editIcon);
+            editIconView.setFitWidth(30);
+            editIconView.setFitHeight(30);
+            Button editButton = new Button();
+            editButton.setOnAction(e -> handleEdit());
+            editButton.setGraphic(editIconView);
 
-        deleteEditButtons.getChildren().addAll(deleteButton, editButton);
+            deleteEditButtons.getChildren().addAll(deleteButton, editButton);
 
 
-        // Create Room Information Vbox
-        VBox firstRoomInfo = new VBox();
-        if (this.RoomName == null) { //If the room has no name, set the name to "Unnamed Room"
-            this.RoomName = "Unnamed Room";
+            // Create Room Information Vbox
+            VBox firstRoomInfo = new VBox();
+            Label firstRoomLabel = new Label(room.getRoomName());
+            Label startLabel = new Label("Starting Room");
+            Label endLabel = new Label("Ending Room");
+            Label forcedLabel = new Label("Forced Room");
+            firstRoomInfo.getChildren().add(firstRoomLabel);
+
+            /*
+            if (isStart) {
+                firstRoomInfo.getChildren().add(startLabel); //If the room is the start room, add the start label
+            } else if (isEnd) {
+                firstRoomInfo.getChildren().add(endLabel); //If the room is the end room, add the end label
+            } else if (isForced) {
+                firstRoomInfo.getChildren().add(forcedLabel); //If the room is a forced room, add the forced label
+            }
+             */
+
+            firstRoomInfo.setPrefHeight(60);
+            firstRoomInfo.setPrefWidth(190);
+            firstRoomInfo.setAlignment(Pos.CENTER);
+            firstRoomInfo.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+
+            // Add Room Info Vbox to Hbox
+            miniRoomView.getChildren().addAll(firstRoomInfo, deleteEditButtons);
+
+            roomList.getChildren().add(miniRoomView);
         }
-        Label firstRoomLabel = new Label(RoomName);
-        Label startLabel = new Label("Starting Room");
-        Label endLabel = new Label("Ending Room");
-        Label forcedLabel = new Label("Forced Room");
-        firstRoomInfo.getChildren().add(firstRoomLabel);
 
-        if (isStart) {
-            firstRoomInfo.getChildren().add(startLabel); //If the room is the start room, add the start label
-        } else if (isEnd) {
-            firstRoomInfo.getChildren().add(endLabel); //If the room is the end room, add the end label
-        } else {
-            firstRoomInfo.getChildren().add(forcedLabel); //If the room is a forced room, add the forced label
-        }
-
-        firstRoomInfo.setPrefHeight(60);
-        firstRoomInfo.setPrefWidth(190);
-        firstRoomInfo.setAlignment(Pos.CENTER);
-        firstRoomInfo.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-
-        // Add Room Info Vbox to Hbox
-        miniRoomView.getChildren().addAll(firstRoomInfo, deleteEditButtons);
-        return miniRoomView;
+        return roomList;
     }
 
     /**
