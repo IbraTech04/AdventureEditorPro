@@ -19,7 +19,7 @@
             <children>
                <BorderPane prefHeight="600.0" prefWidth="400.0">
                   <top>
-                     <Label accessibleText="New Gate" alignment="TOP_CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="90.0" text="New Gate" BorderPane.alignment="CENTER">
+                     <Label accessibleText="New Gate" alignment="TOP_CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="600.0" text="New Gate" BorderPane.alignment="CENTER">
                         <padding>
                            <Insets bottom="10.0" top="10.0" />
                         </padding>
@@ -28,13 +28,13 @@
                   <center>
                      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
                         <children>
-                           <Label accessibleText="Destination Room" alignment="CENTER" contentDisplay="CENTER" prefHeight="31.0" prefWidth="162.0" text="Destination Room of Gate" textAlignment="CENTER">
+                           <Label accessibleText="Destination Room" alignment="CENTER" contentDisplay="CENTER" prefHeight="31.0" prefWidth="600.0" text="Destination Room of Gate" textAlignment="CENTER">
                               <padding>
                                  <Insets left="10.0" right="10.0" />
                               </padding>
                            </Label>
                            <MenuButton accessibleText="Choose Room" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Choose Room" textAlignment="CENTER" />
-                           <Label accessibleText="Destination Room" alignment="CENTER" contentDisplay="CENTER" prefHeight="31.0" prefWidth="143.0" text="Direction of Gate" textAlignment="CENTER">
+                           <Label accessibleText="Destination Room" alignment="CENTER" contentDisplay="CENTER" prefHeight="31.0" prefWidth="600.0" text="Direction of Gate" textAlignment="CENTER">
                               <padding>
                                  <Insets left="10.0" right="10.0" />
                               </padding>
@@ -47,7 +47,7 @@
                                  <Insets left="100.0" right="100.0" />
                               </VBox.margin>
                            </TextField>
-                           <Label accessibleText="Destination Room" alignment="CENTER" contentDisplay="CENTER" prefHeight="31.0" prefWidth="143.0" text="Blocked by Object?" textAlignment="CENTER">
+                           <Label accessibleText="Destination Room" alignment="CENTER" contentDisplay="CENTER" prefHeight="31.0" prefWidth="600.0" text="Blocked by Object?" textAlignment="CENTER">
                               <padding>
                                  <Insets left="10.0" right="10.0" />
                               </padding>
@@ -71,7 +71,7 @@
                      </VBox>
                   </center>
                   <bottom>
-                     <Label alignment="TOP_LEFT" prefHeight="73.0" prefWidth="401.0" text="Issues:" BorderPane.alignment="CENTER">
+                     <Label alignment="TOP_LEFT" prefHeight="73.0" prefWidth="600.0" text="Issues:" BorderPane.alignment="CENTER">
                         <padding>
                            <Insets bottom="2.0" left="10.0" right="10.0" top="2.0" />
                         </padding></Label>
