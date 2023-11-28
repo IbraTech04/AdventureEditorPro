@@ -82,7 +82,7 @@ public class ViewAdventureEditor {
     public void intiUI() {
 
         // Setting up the stage
-        this.stage.setTitle("Adventure Game Creator");
+        this.stage.setTitle("AdventureEditorPro");
         layout = new BorderPane();
 
         //-------------------------------------------------------------------------------------------------------------
@@ -134,7 +134,7 @@ public class ViewAdventureEditor {
         //Create All Rooms Scroll Pane
         allRooms = new ScrollPane();
         allRooms.setContent(createMiniRoomView(List.of()));
-        allRooms.setPrefWidth(210);
+        allRooms.setPrefWidth(271);
         allRooms.setPrefHeight(1000);
 
         // Build Left Pane
@@ -177,6 +177,7 @@ public class ViewAdventureEditor {
         layout.setRight(rightPane);
         var scene = new Scene( layout , 1100, 800);
         scene.getStylesheets().add("views/styles/HighContrast.css");
+        this.stage.getIcons().add(new Image("assets/icon.png"));
         this.stage.setScene(scene);
         this.stage.setMaximized(true);
         this.stage.setResizable(true);
@@ -186,7 +187,7 @@ public class ViewAdventureEditor {
 
     /**
      * updateRoomView
-     * Updates the current room view with an empty room. //TODO: Integrate loading of existing room
+     * Updates the current room view with an empty room. //TODO: Implement loading of existing room
      */
     public void updateRoomView() {
         if(currentlySelectedRoom == null) {
@@ -320,14 +321,13 @@ public class ViewAdventureEditor {
     }
 
     /**
-     * updateAllRooms
+     * updateAllGates
      * Updates the gatePane ScrollPane anytime an edit is made, a gate is added, or a gate is deleted.
      */
     public void updateGates() { //TODO: Integrate this method
         VBox gateList = new VBox();
         gatePane.setContent(gateList);
     }
-
 
     /**
      * createMiniRoomView
@@ -435,7 +435,7 @@ public class ViewAdventureEditor {
      * handleNameField
      * @param e the key event
      */
-    private void handleNameField(KeyEvent e) { //TODO: Integrate live updating of mini room view
+    private void handleNameField(KeyEvent e) { //TODO: Implement live updating of mini room view
         if (e.getCode().equals(KeyCode.ENTER) || e.getCode().equals(KeyCode.TAB)){
             this.RoomName = this.nameField.getText();
             this.descriptionField.requestFocus();
@@ -448,7 +448,7 @@ public class ViewAdventureEditor {
      * handleDescriptionField
      * @param e the key event
      */
-    private void handleDescriptionField(KeyEvent e) { //TODO: Integrate live updating of mini room view
+    private void handleDescriptionField(KeyEvent e) { //TODO: Implement live updating of mini room view
         if (e.getCode().equals(KeyCode.ENTER) || e.getCode().equals(KeyCode.TAB)){
             this.RoomDescription = this.descriptionField.getText();
             this.addGateButton.requestFocus();
@@ -465,7 +465,6 @@ public class ViewAdventureEditor {
      */
     private void handleLoadFile() {
         LoadView loadView = new LoadView(this);
-        System.out.println("Load File Button Pressed");
     }
 
     /**
@@ -473,7 +472,6 @@ public class ViewAdventureEditor {
      */
     private void handleSaveFile() {
         SaveView saveView = new SaveView(this);
-        System.out.println("Save File Button Pressed");
     }
 
     /**
@@ -487,7 +485,7 @@ public class ViewAdventureEditor {
      * handleHelp
      */
     private void handleHelp() {
-        System.out.println("Help Button Pressed");
+        HelpView helpView = new HelpView();
     }
 
     /**
@@ -529,14 +527,14 @@ public class ViewAdventureEditor {
      * handleAddObjectButton
      */
     private void handleAddObjectButton() {
-        System.out.println("Add Object Button Pressed");
+        CreateObject createObjectView = new CreateObject();
     }
 
     /**
      * handleAddGateButton
      */
     private void handleAddGateButton() {
-        System.out.println("Add Gate Button Pressed");
+        CreateGate createGateView = new CreateGate();
     }
 
     /**
@@ -560,7 +558,7 @@ public class ViewAdventureEditor {
     /**
      * handleForcedCheckBox
      */
-    private void handleForcedCheckBox() { //TODO: Integrate live updating of mini room view
+    private void handleForcedCheckBox() { //TODO: Implement live updating of mini room view
         if (this.forcedCheckBox.isSelected()){
             this.isForced = true;
         } else {
@@ -572,7 +570,7 @@ public class ViewAdventureEditor {
     /**
      * handleStartCheckBox
      */
-    private void handleStartCheckBox() { //TODO: Integrate live updating of mini room view
+    private void handleStartCheckBox() { //TODO: Implement live updating of mini room view
         if (this.startCheckBox.isSelected()){
             this.isStart = true;
         } else {
@@ -584,7 +582,7 @@ public class ViewAdventureEditor {
     /**
      * handleEndCheckBox
      */
-    private void handleEndCheckBox() { //TODO: Integrate live updating of mini room view
+    private void handleEndCheckBox() { //TODO: Implement live updating of mini room view
         if (this.endCheckBox.isSelected()){
             this.isEnd = true;
         } else {

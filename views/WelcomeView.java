@@ -26,7 +26,7 @@ public class WelcomeView extends Application {
             System.out.println(e.getMessage());
         }
         // Set the icon
-        primaryStage.getIcons().add(new Image("file:icon.png"));
+        primaryStage.getIcons().add(new Image("assets/icon.png"));
         // Set the title
         primaryStage.setTitle("AdventureEditorPro");
         primaryStage.setScene(new Scene(root));

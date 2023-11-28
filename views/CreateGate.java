@@ -1,31 +1,11 @@
 package views;
-import javafx.animation.PauseTransition;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.paint.Color;
-import javafx.scene.layout.*;
-import javafx.scene.input.KeyEvent; //you will need these!
-import javafx.scene.input.KeyCode;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.util.Duration;
-import javafx.event.EventHandler; //you will need this too!
-import javafx.scene.AccessibleRole;
-import AdventureModel.AdventureGame;
-import AdventureModel.AdventureLoader;
-import javafx.stage.Modality;
-
+import javafx.fxml.FXMLLoader;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Objects;
+
 
 
 /**
@@ -34,24 +14,24 @@ import java.util.Objects;
  */
 
 public class CreateGate {
-    private ViewAdventureEditor adventureEditor;
-    private MenuButton selectRoomButton;
-    private ArrayList<String> selectRoomList;
-    private MenuButton selectDirectionButton;
-    private MenuButton selectForcedButton;
-    ActionEvent even;
 
-    private ListView<String> GameList;
-    private String filename = null;
-
-    public CreateGate(ViewAdventureEditor adventureEditor) {
-        this.adventureEditor = adventureEditor;
-
-
-    }
-    public void choose_room (ActionEvent even){
-
-
+    public CreateGate() {
+        Stage stage = new Stage();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("CreateGate.fxml"));
+        Parent root = null;
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+        stage.setScene(new Scene(root));
+        // Set the icon
+        stage.getIcons().add(new Image("assets/icon.png"));
+        // Set the title
+        stage.setTitle("AdventureEditorPro");
+        // Disable Resizing
+        stage.setResizable(false);
+        stage.show();
     }
 
 }
