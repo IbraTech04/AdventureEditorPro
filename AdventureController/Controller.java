@@ -51,6 +51,16 @@ public class Controller {
         view.updateAllRooms(rooms);
     }
 
+    public void updateRoomName(Room room, String name) {
+        room.setRoomName(name);
+        view.updateAllRooms(getAllRooms());
+    }
+
+    public void updateRoomDescription(Room room, String description) {
+        room.setRoomDescription(description);
+        view.updateAllRooms(getAllRooms());
+    }
+
     public void deleteRoom(Room room) {
         // If the room ID is 1, raise an error (you can't delete the first room)
         if(room.getRoomNumber() == 1) {
