@@ -3,13 +3,14 @@ package gptfx;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * JavaFX Abstraction Layer which renders a PassageCycle
- * @author Ibrahim Chehab, ChatGPT
+ * @author Ibrahim Chehab, Themba Dube, ChatGPT
  */
 public class GraphCanvas extends Canvas {
     private List<CircularNode> nodes;
@@ -21,10 +22,11 @@ public class GraphCanvas extends Canvas {
         connections = new ArrayList<>();
     }
 
-    public void addNode(double x, double y, double radius) {
+    public CircularNode addNode(double x, double y, double radius) {
         CircularNode node = new CircularNode(x, y, radius);
         nodes.add(node);
         redrawCanvas();
+        return node;
     }
 
     public void connectNodes(int index1, int index2) {
@@ -36,7 +38,8 @@ public class GraphCanvas extends Canvas {
 
     private void redrawCanvas() {
         GraphicsContext gc = getGraphicsContext2D();
-        gc.clearRect(0, 0, getWidth(), getHeight());
+        gc.setFill(Color.BLACK);
+        gc.fillRect(0, 0, getWidth(), getHeight());
 
         for (Connection connection : connections) {
             connection.draw(gc);
@@ -47,18 +50,18 @@ public class GraphCanvas extends Canvas {
         }
     }
 
-    private static class CircularNode {
+    public static class CircularNode {
         private double x;
         private double y;
         private double radius;
 
-        public CircularNode(double x, double y, double radius) {
+        CircularNode(double x, double y, double radius) {
             this.x = x;
             this.y = y;
             this.radius = radius;
         }
 
-        public void draw(GraphicsContext gc) {
+        void draw(GraphicsContext gc) {
             gc.setFill(Color.BLUE);
             gc.fillOval(x - radius, y - radius, 2 * radius, 2 * radius);
         }
