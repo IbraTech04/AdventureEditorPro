@@ -4,6 +4,7 @@ import AdventureModel.AdventureGame;
 import AdventureModel.Connection;
 import AdventureModel.Room;
 import views.ViewAdventureEditor;
+import views.VisualizerView;
 
 
 import java.util.Collection;
@@ -100,5 +101,9 @@ public class Controller {
         room1.getPassages().remove(pair);
         // Step 2: Update the view
         view.updateAllRooms(getAllRooms());
+    }
+
+    public void visualizeGatesFromRoom(Room room) {
+        new VisualizerView(room);
     }
 }
