@@ -3,6 +3,7 @@ package views;
 import AdventureController.Controller;
 import AdventureModel.AdventureGame;
 import AdventureModel.AdventureObject;
+import AdventureModel.Connection;
 import AdventureModel.Room;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
@@ -31,10 +32,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Class AdventureGameView.
@@ -55,7 +53,10 @@ public class ViewAdventureEditor {
     String ImagePath, RoomName, RoomDescription;
     Boolean isStart, isEnd, isForced;
     ImageView roomImageView;
-    ArrayList<HBox> roomsList;
+
+    ScrollPane gatePane, objectsPane;
+
+    Room currentlySelectedRoom;
 
 
     /**
@@ -143,7 +144,7 @@ public class ViewAdventureEditor {
 
         //-------------------------------------------------------------------------------------------------------------
         //Create Gate Scroll Pane and Label
-        ScrollPane gatePane = new ScrollPane();
+        gatePane = new ScrollPane();
         gatePane.setPrefWidth(190);
         gatePane.setPrefHeight(500);
         Label gatesLabel = new Label("Gates to Current Room:  ");
@@ -156,7 +157,7 @@ public class ViewAdventureEditor {
         gatesLabelButton.getChildren().addAll(gatesLabel, visualizeButton);
 
         //Create Objects Scroll Pane
-        ScrollPane objectsPane = new ScrollPane();
+        objectsPane = new ScrollPane();
         objectsPane.setPrefWidth(190);
         objectsPane.setPrefHeight(400);
         GridPane objectsGrid = new GridPane();
@@ -189,6 +190,10 @@ public class ViewAdventureEditor {
      * Updates the current room view with an empty room. //TODO: Implement loading of existing room
      */
     public void updateRoomView() {
+        if(currentlySelectedRoom == null) {
+            this.layout.setCenter(null);
+            return;
+        }
         //Create Text Box's (GridPane 1)
         GridPane roomViewG1 = new GridPane();
         roomViewG1.setPadding(new Insets(10, 10, 10, 10));
@@ -203,7 +208,10 @@ public class ViewAdventureEditor {
         nameField = new TextField();
         nameField.setPrefWidth(400);
         nameField.setPromptText("Choose a Room Name");
-        nameField.setOnKeyPressed(e -> handleNameField(e));
+        nameField.textProperty().addListener((observable, old, newVal) -> {
+            controller.updateRoomName(currentlySelectedRoom, newVal);
+        });
+        nameField.setText(currentlySelectedRoom.getRoomName());
         //Add description label
         Label descriptionLabel = new Label("Room Description:");
         //Add description text field
@@ -212,7 +220,10 @@ public class ViewAdventureEditor {
         descriptionField.setPrefHeight(200);
         descriptionField.setPromptText("Enter a Room Description");
         descriptionField.wrapTextProperty().setValue(true);
-        descriptionField.setOnKeyPressed(e -> handleDescriptionField(e));
+        descriptionField.textProperty().addListener((observable, old, newVal) -> {
+            controller.updateRoomDescription(currentlySelectedRoom, newVal);
+        });
+        descriptionField.setText(currentlySelectedRoom.getUnsanitizedRoomDescription());
 
         //Add Default Image View (GridPane 2)
         GridPane roomViewG2 = new GridPane();
@@ -297,6 +308,8 @@ public class ViewAdventureEditor {
         roomView.add(runButtonBox, 0, 3);
         
         this.layout.setCenter(roomView);
+
+        updateGates();
     }
 
     /**
@@ -311,8 +324,9 @@ public class ViewAdventureEditor {
      * updateAllGates
      * Updates the gatePane ScrollPane anytime an edit is made, a gate is added, or a gate is deleted.
      */
-    public void updateGates() { //TODO: Implements this method
-
+    public void updateGates() { //TODO: Integrate this method
+        VBox gateList = new VBox();
+        gatePane.setContent(gateList);
     }
 
     /**
@@ -334,6 +348,7 @@ public class ViewAdventureEditor {
             trashIconView.setFitWidth(30);
             trashIconView.setFitHeight(30);
             Button deleteButton = new Button();
+            // TODO: change currently selected room upon deletion if needed
             deleteButton.setOnAction(e -> controller.deleteRoom(room));
             deleteButton.setGraphic(trashIconView);
 
@@ -371,6 +386,11 @@ public class ViewAdventureEditor {
             firstRoomInfo.setPrefWidth(190);
             firstRoomInfo.setAlignment(Pos.CENTER);
             firstRoomInfo.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+
+            firstRoomInfo.setOnMouseClicked(e -> {
+                currentlySelectedRoom = room;
+                updateRoomView();
+            });
 
             // Add Room Info Vbox to Hbox
             miniRoomView.getChildren().addAll(firstRoomInfo, deleteEditButtons);
