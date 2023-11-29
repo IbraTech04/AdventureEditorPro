@@ -135,7 +135,7 @@ public class ViewAdventureEditor {
         //Create All Rooms Scroll Pane
         allRooms = new ScrollPane();
         allRooms.setContent(createMiniRoomView(List.of()));
-        allRooms.setPrefWidth(271);
+        allRooms.setPrefWidth(275);
         allRooms.setPrefHeight(1000);
 
         // Build Left Pane
@@ -193,7 +193,11 @@ public class ViewAdventureEditor {
      */
     public void updateRoomView() {
         if(currentlySelectedRoom == null) {
-            this.layout.setCenter(null);
+            Image image = new Image("assets/icon.png");
+            ImageView imageView = new ImageView(image);
+            imageView.setFitWidth(500);
+            imageView.setFitHeight(500);
+            this.layout.setCenter(imageView);
             return;
         }
         //Create Text Box's (GridPane 1)
@@ -375,6 +379,7 @@ public class ViewAdventureEditor {
             // Create Room Information Vbox
             VBox firstRoomInfo = new VBox();
             Label firstRoomLabel = new Label(room.getRoomName());
+            firstRoomLabel.setStyle("-fx-text-fill: #122435");
             Label startLabel = new Label("Starting Room");
             Label endLabel = new Label("Ending Room");
             Label forcedLabel = new Label("Forced Room");
@@ -393,7 +398,9 @@ public class ViewAdventureEditor {
             firstRoomInfo.setPrefHeight(60);
             firstRoomInfo.setPrefWidth(190);
             firstRoomInfo.setAlignment(Pos.CENTER);
-            firstRoomInfo.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+            firstRoomInfo.setStyle("-fx-background-color: #fefeff");
+
+            firstRoomInfo.setBorder(new Border(new BorderStroke(Color.rgb(0, 45, 61), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
 
             firstRoomInfo.setOnMouseClicked(e -> {
                 currentlySelectedRoom = room;
