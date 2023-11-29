@@ -124,7 +124,6 @@ public class ViewAdventureEditor {
         roomViewHbox.setPrefHeight(20);
         Label roomsLabel = new Label("All Rooms:  ");
         addRoomButton = new Button("Add Room");
-        makeButtonAccessible(addRoomButton, "Add Room", "Add a Room to your Game.", "Click to add a Room to your Game.");
         addRoomButton.setOnAction(e -> {
             controller.addRoom();
         });
@@ -152,7 +151,6 @@ public class ViewAdventureEditor {
         HBox gatesLabelButton = new HBox();
         //Create Visualize Button
         visualizeButton = new Button("Visualize");
-        makeButtonAccessible(visualizeButton, "Visualize", "Visualize the gates from the current room.", "Click to visualize the gates from the current room.");
         visualizeButton.setOnAction(e -> handleVisualize());
         //Add Gates Label and Visualize Button to HBox
         gatesLabelButton.setPadding(new Insets(5, 5, 5, 5));
@@ -243,7 +241,6 @@ public class ViewAdventureEditor {
         HBox imageButtonLabel = new HBox();
         imageLabel = new Label("");
         imageButton = new Button("Add Image");
-        makeButtonAccessible(imageButton, "Add Image", "Add Image an Image to your Room.", "Click to add an image from your computer to your Room.");
         imageButton.setOnAction(e -> handleAddImage());
         imageButtonLabel.getChildren().addAll(imageButton, imageLabel);
 
@@ -257,11 +254,9 @@ public class ViewAdventureEditor {
 
         //Add Object addition button
         addObjectButton = new Button("Add Object");
-        makeButtonAccessible(addObjectButton, "Add Object", "Add an Object to your Room.", "Click to add an Object to the current Room.");
         addObjectButton.setOnAction(e -> handleAddObjectButton());
         //Add Gate addition button
         addGateButton = new Button("Add Gate");
-        makeButtonAccessible(addGateButton, "Add Gate", "Add a Gate to your Room.", "Click to add a Gate to the current Room.");
         addGateButton.setOnAction(e -> handleAddGateButton());
 
         //Add Forced Check Box
@@ -284,7 +279,6 @@ public class ViewAdventureEditor {
         //Create Run Button
         HBox runButtonBox = new HBox();
         runButton = new Button("Run Game!");
-        makeButtonAccessible(runButton, "Run Game", "Run the Game you have created.", "Click to run the Game you have created.");
         runButton.setOnAction(e -> handleRun());
         runButtonBox.getChildren().add(runButton);
         runButtonBox.setAlignment(Pos.CENTER);
