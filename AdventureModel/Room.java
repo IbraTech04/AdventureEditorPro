@@ -3,6 +3,7 @@ package AdventureModel;
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * This class contains the information about a 

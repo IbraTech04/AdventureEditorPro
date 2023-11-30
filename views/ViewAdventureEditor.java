@@ -151,7 +151,9 @@ public class ViewAdventureEditor {
         HBox gatesLabelButton = new HBox();
         //Create Visualize Button
         visualizeButton = new Button("Visualize");
-        visualizeButton.setOnAction(e -> handleVisualize());
+        visualizeButton.setOnAction(e -> {
+            this.controller.visualizeGatesFromRoom(currentlySelectedRoom);
+        });
         //Add Gates Label and Visualize Button to HBox
         gatesLabelButton.setPadding(new Insets(5, 5, 5, 5));
         gatesLabelButton.getChildren().addAll(gatesLabel, visualizeButton);
@@ -554,6 +556,4 @@ public class ViewAdventureEditor {
         }
         System.out.println("Room End is " + this.isEnd);
     }
-
-
 }
