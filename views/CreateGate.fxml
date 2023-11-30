@@ -1,83 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.Scene?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ButtonBar?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.stage.Stage?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<Stage fx:id="Create_Gate" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.HelpView">
-    <scene>
-        <Scene>
-            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" stylesheets="@styles/HighContrast.css">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" stylesheets="@styles/HighContrast.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
+<children>
+   <BorderPane prefHeight="600.0" prefWidth="400.0">
+      <top>
+         <Label accessibleText="New Gate" alignment="TOP_CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="600.0" text="New Gate" BorderPane.alignment="CENTER">
+            <padding>
+               <Insets bottom="10.0" top="10.0" />
+            </padding>
+         </Label>
+      </top>
+      <center>
+         <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
             <children>
-               <BorderPane prefHeight="600.0" prefWidth="400.0">
-                  <top>
-                     <Label accessibleText="New Gate" alignment="TOP_CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="600.0" text="New Gate" BorderPane.alignment="CENTER">
-                        <padding>
-                           <Insets bottom="10.0" top="10.0" />
-                        </padding>
-                     </Label>
-                  </top>
-                  <center>
-                     <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
-                        <children>
-                           <Label accessibleText="Destination Room" alignment="CENTER" contentDisplay="CENTER" prefHeight="31.0" prefWidth="600.0" text="Destination Room of Gate" textAlignment="CENTER">
-                              <padding>
-                                 <Insets left="10.0" right="10.0" />
-                              </padding>
-                           </Label>
-                           <MenuButton accessibleText="Choose Room" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Choose Room" textAlignment="CENTER" />
-                           <Label accessibleText="Destination Room" alignment="CENTER" contentDisplay="CENTER" prefHeight="31.0" prefWidth="600.0" text="Direction of Gate" textAlignment="CENTER">
-                              <padding>
-                                 <Insets left="10.0" right="10.0" />
-                              </padding>
-                              <VBox.margin>
-                                 <Insets top="10.0" />
-                              </VBox.margin>
-                           </Label>
-                           <TextField promptText="type description">
-                              <VBox.margin>
-                                 <Insets left="100.0" right="100.0" />
-                              </VBox.margin>
-                           </TextField>
-                           <Label accessibleText="Destination Room" alignment="CENTER" contentDisplay="CENTER" prefHeight="31.0" prefWidth="600.0" text="Blocked by Object?" textAlignment="CENTER">
-                              <padding>
-                                 <Insets left="10.0" right="10.0" />
-                              </padding>
-                              <VBox.margin>
-                                 <Insets top="10.0" />
-                              </VBox.margin>
-                           </Label>
-                           <MenuButton accessibleText="Choose Room" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Choose Objects" textAlignment="CENTER" />
-                           <ButtonBar prefHeight="40.0" prefWidth="200.0">
-                             <buttons>
-                               <Button accessibleText="Create" mnemonicParsing="false" text="Create" />
-                             </buttons>
-                              <VBox.margin>
-                                 <Insets top="40.0" />
-                              </VBox.margin>
-                              <padding>
-                                 <Insets right="20.0" />
-                              </padding>
-                           </ButtonBar>
-                        </children>
-                     </VBox>
-                  </center>
-                  <bottom>
-                     <Label alignment="TOP_LEFT" prefHeight="73.0" prefWidth="600.0" text="Issues:" BorderPane.alignment="CENTER">
-                        <padding>
-                           <Insets bottom="2.0" left="10.0" right="10.0" top="2.0" />
-                        </padding></Label>
-                  </bottom>
-               </BorderPane>
-            </children></AnchorPane>
-        </Scene>
-    </scene>
-</Stage>
+               <Label accessibleText="Destination Room" alignment="CENTER" contentDisplay="CENTER" prefHeight="31.0" prefWidth="600.0" text="Destination Room of Gate" textAlignment="CENTER">
+                  <padding>
+                     <Insets left="10.0" right="10.0" />
+                  </padding>
+               </Label>
+               <MenuButton accessibleText="Choose Room" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Choose Room" textAlignment="CENTER" />
+               <Label accessibleText="Destination Room" alignment="CENTER" contentDisplay="CENTER" prefHeight="31.0" prefWidth="600.0" text="Direction of Gate" textAlignment="CENTER">
+                  <padding>
+                     <Insets left="10.0" right="10.0" />
+                  </padding>
+                  <VBox.margin>
+                     <Insets top="10.0" />
+                  </VBox.margin>
+               </Label>
+               <TextField promptText="type description">
+                  <VBox.margin>
+                     <Insets left="100.0" right="100.0" />
+                  </VBox.margin>
+               </TextField>
+               <Label accessibleText="Destination Room" alignment="CENTER" contentDisplay="CENTER" prefHeight="31.0" prefWidth="600.0" text="Blocked by Object?" textAlignment="CENTER">
+                  <padding>
+                     <Insets left="10.0" right="10.0" />
+                  </padding>
+                  <VBox.margin>
+                     <Insets top="10.0" />
+                  </VBox.margin>
+               </Label>
+               <MenuButton accessibleText="Choose Room" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Choose Objects" textAlignment="CENTER" />
+               <CheckBox alignment="CENTER" mnemonicParsing="false" prefHeight="62.0" prefWidth="120.0" text="Is Forced?" />
+               <ButtonBar prefHeight="40.0" prefWidth="200.0">
+                 <buttons>
+                   <Button accessibleText="Create" mnemonicParsing="false" text="Create" />
+                 </buttons>
+                  <VBox.margin>
+                     <Insets top="40.0" />
+                  </VBox.margin>
+                  <padding>
+                     <Insets right="20.0" />
+                  </padding>
+               </ButtonBar>
+            </children>
+         </VBox>
+      </center>
+   </BorderPane>
+</children></AnchorPane>

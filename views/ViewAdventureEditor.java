@@ -48,7 +48,7 @@ public class ViewAdventureEditor {
     Label imageLabel;
     TextField nameField;
     TextArea descriptionField;
-    CheckBox forcedCheckBox, startCheckBox, endCheckBox;
+    CheckBox endCheckBox;
     ScrollPane allRooms;
     String ImagePath, RoomName, RoomDescription;
     Boolean isStart, isEnd, isForced;
@@ -259,17 +259,6 @@ public class ViewAdventureEditor {
         addGateButton = new Button("Add Gate");
         addGateButton.setOnAction(e -> handleAddGateButton());
 
-        //Add Forced Check Box
-        forcedCheckBox = new CheckBox("Is Forced?");
-        isForced = true;
-        forcedCheckBox.setOnAction(e -> handleForcedCheckBox());
-
-        //Add Start Check Box
-        startCheckBox = new CheckBox("Start");
-        startCheckBox.setSelected(true);
-        isStart = true;
-        startCheckBox.setOnAction(e -> handleStartCheckBox());
-
         //Add End Check Box
         endCheckBox = new CheckBox("End");
         isEnd = true;
@@ -293,9 +282,7 @@ public class ViewAdventureEditor {
         roomViewG2.add(roomImageView, 0, 1);
         roomViewG3.add(addObjectButton, 1, 0);
         roomViewG3.add(addGateButton, 0, 0);
-        roomViewG3.add(forcedCheckBox, 0, 1);
-        roomViewG3.add(startCheckBox, 1, 1);
-        roomViewG3.add(endCheckBox, 2, 1);
+        roomViewG3.add(endCheckBox, 2, 0);
 
         //Create New Room View using GridPanes
         GridPane roomView = new GridPane();
@@ -555,29 +542,6 @@ public class ViewAdventureEditor {
 
     }
 
-    /**
-     * handleForcedCheckBox
-     */
-    private void handleForcedCheckBox() { //TODO: Implement live updating of mini room view
-        if (this.forcedCheckBox.isSelected()){
-            this.isForced = true;
-        } else {
-            this.isForced = false;
-        }
-        System.out.println("Room Forced is " + this.isForced);
-    }
-
-    /**
-     * handleStartCheckBox
-     */
-    private void handleStartCheckBox() { //TODO: Implement live updating of mini room view
-        if (this.startCheckBox.isSelected()){
-            this.isStart = true;
-        } else {
-            this.isStart = false;
-        }
-        System.out.println("Room Start is " + this.isStart);
-    }
 
     /**
      * handleEndCheckBox
