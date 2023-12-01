@@ -1,23 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.stage.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-
-<AnchorPane prefHeight="600.0" prefWidth="400.0" stylesheets="@styles/HighContrast.css">
+<AnchorPane prefHeight="600.0" prefWidth="400.0" stylesheets="@styles/HighContrast.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
 <children>
    <BorderPane layoutX="100.0" layoutY="200.0" prefHeight="600.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <top>
-         <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="34.0" prefWidth="290.0" text="New Object" BorderPane.alignment="CENTER" />
+         <Label accessibleText="New Object Window" alignment="CENTER" contentDisplay="CENTER" prefHeight="34.0" prefWidth="290.0" text="New Object" BorderPane.alignment="CENTER" />
       </top>
       <center>
          <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
             <children>
-               <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+               <ImageView accessibleHelp="This is a great picture" accessibleText="Image of Object" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                   <VBox.margin>
                      <Insets top="20.0" />
                   </VBox.margin>
@@ -25,17 +29,17 @@
                      <Image url="@../assets/ahmed.jpg" />
                   </image>
                </ImageView>
-               <Button mnemonicParsing="false" text="Choose Image">
+               <Button accessibleHelp="Press to choose an image for your object from your desktop" accessibleText="Choose image" mnemonicParsing="false" text="Choose Image">
                   <VBox.margin>
                      <Insets top="10.0" />
                   </VBox.margin>
                </Button>
-               <TextField promptText="Type Name">
+               <TextField accessibleHelp="Type the name of your object" accessibleText="Type Name" promptText="Type Name">
                   <VBox.margin>
                      <Insets left="100.0" right="100.0" top="10.0" />
                   </VBox.margin>
                </TextField>
-               <TextArea prefHeight="150.0" prefWidth="200.0" promptText="Type Description....">
+               <TextArea accessibleHelp="Type the description of your object" accessibleText="Type Description" prefHeight="150.0" prefWidth="200.0" promptText="Type Description....">
                   <VBox.margin>
                      <Insets left="50.0" right="50.0" top="20.0" />
                   </VBox.margin>
@@ -45,7 +49,7 @@
                      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                   </padding>
                   <children>
-                     <Button mnemonicParsing="false" text="Complete" />
+                     <Button accessibleHelp="Press to create your abject" accessibleText="Complete" mnemonicParsing="false" text="Complete" />
                   </children>
                </HBox>
             </children>

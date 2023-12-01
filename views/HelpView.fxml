@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="415.0" prefWidth="539.0" stylesheets="@styles/HighContrast.css" >
+<AnchorPane prefHeight="415.0" prefWidth="539.0" stylesheets="@styles/HighContrast.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
 <children>
-   <ScrollPane layoutX="6.0" layoutY="3.0" prefHeight="409.0" prefWidth="526.0" >
+   <ScrollPane layoutX="6.0" layoutY="3.0" prefHeight="409.0" prefWidth="526.0">
       <content>
-         <Label alignment="TOP_LEFT" prefHeight="572.0" prefWidth="400.0" text="Instructions:">
+         <Label accessibleHelp="This is an Adventure Game Creator.&#10;To create an Adventure Game you can start by creating rooms.&#10;You can add a room by clicking on the Create Room button. You can add gates to your room by pressing the add Gate button.&#10;You must create a start and end room. Some of your rooms can force teleport a player to another room. Some rooms are also blocked by Objects.&#10;To create an object, press the create object button. You can add pictures to objects and rooms. &#10;After you are done, press  finish and you will be able to play the game you create. Enjoy!" accessibleText="This is an Adventure Game Creator.&#10;To create an Adventure Game you can start by creating rooms.&#10;You can add a room by clicking on the Create Room button. You can add gates to your room by pressing the add Gate button.&#10;You must create a start and end room. Some of your rooms can force teleport a player to another room. Some rooms are also blocked by Objects.&#10;To create an object, press the create object button. You can add pictures to objects and rooms. &#10;After you are done, press  finish and you will be able to play the game you create. Enjoy!" alignment="TOP_LEFT" prefHeight="572.0" prefWidth="400.0" text="Instructions:&#10;&#10;This is an Adventure Game Creator.&#10;To create an Adventure Game you can start by creating rooms.&#10;You can add a room by clicking on the Create Room button. You can add gates to your room by pressing the add Gate button.&#10;You must create a start and end room. Some of your rooms can force teleport a player to another room. Some rooms are also blocked by Objects.&#10;To create an object, press the create object button. You can add pictures to objects and rooms. &#10;After you are done, press  finish and you will be able to play the game you create. Enjoy!" wrapText="true">
             <font>
                <Font size="24.0" />
             </font>
