@@ -93,7 +93,8 @@ public class VisualizerView {
                 if(destination == null) {
                     throw new IllegalStateException("There is a connection from room %d->%d, but no node".formatted(visualizedRoom.getKey().getRoomNumber(), connection.getValue().getRoomNumber()));
                 }
-                canvas.connectNodes(visualizedRoom.getValue(), destination);
+                // Get the locked state of the room
+                canvas.connectNodes(visualizedRoom.getValue(), destination, connection.getKey().lock(),  connection.getKey().direction());
             }
         }
     }
