@@ -51,7 +51,7 @@ public class VisualizerView {
 
         // BFS iteration over all rooms with the start node being the given room
         Queue<RoomAndPosition> roomsToIterate = new ArrayDeque<>();
-        Map<Room, GraphCanvas.CircularNode> seenRooms = new HashMap<>();
+        Map<Room, GraphCanvas.CircularNode> seenRooms = new LinkedHashMap<>();
         roomsToIterate.add(new RoomAndPosition(new Point2D((canvas.getWidth() - NODE_RADIUS) / 2, (canvas.getHeight() - NODE_RADIUS) / 2), startNode, Float.NaN));
         while(!roomsToIterate.isEmpty()) {
             RoomAndPosition entry = roomsToIterate.remove();
