@@ -1,11 +1,12 @@
 package views;
 
+import TTS.Free_TTS;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import Free_TTS.*;
+
 import java.io.IOException;
 
 /**
@@ -16,7 +17,7 @@ import java.io.IOException;
 public class HelpView {
 
     public HelpView() {
-        TTS tts = new TTS();
+        Free_TTS tts = new Free_TTS();
         Stage stage = new Stage();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("HelpView.fxml"));
         Parent root = null;
