@@ -17,18 +17,37 @@ public class VisualizerView {
     private static final float NODE_RADIUS = 20;
     private static final float RESTRICTED_ANGLE = 45;
     private static final float DISTANCE = 200;
-    private GraphCanvas canvas;
-    private Stage stage;
+    private final GraphCanvas canvas;
+    private final Stage stage;
+    private final Room startNode;
 
     private record RoomAndPosition(Point2D position, Room room, float incomingAngle) {}
 
     public VisualizerView(Room startNode) {
+        this.startNode = startNode;
         this.stage = new Stage();
         stage.setTitle("Visualizer");
+        stage.setWidth(800);
+        stage.setHeight(600);
         stage.show();
 
         canvas = new GraphCanvas(stage.getWidth(), stage.getHeight());
         stage.setScene(new Scene(new VBox(canvas))); // "Why do I have to give it a VBox with one child?" - Themba
+
+        stage.widthProperty().addListener((obs, o, n) -> this.onResized());
+        stage.heightProperty().addListener(((obs, o, n) -> this.onResized()));
+
+        redrawVisualization();
+    }
+
+    private void onResized() {
+        canvas.setWidth(stage.getWidth());
+        canvas.setHeight(stage.getHeight());
+        redrawVisualization();
+    }
+
+    private void redrawVisualization() {
+        canvas.clear();
 
         // BFS iteration over all rooms with the start node being the given room
         Queue<RoomAndPosition> roomsToIterate = new ArrayDeque<>();
@@ -38,7 +57,7 @@ public class VisualizerView {
             RoomAndPosition entry = roomsToIterate.remove();
             if (!seenRooms.containsKey(entry.room())) {
                 // room has not been seen before
-                GraphCanvas.CircularNode theNode = canvas.addNode(entry.position.getX(), entry.position.getY(), NODE_RADIUS);
+                GraphCanvas.CircularNode theNode = canvas.addNode(entry.position.getX(), entry.position.getY(), NODE_RADIUS, String.valueOf(entry.room().getRoomNumber()));
                 seenRooms.put(entry.room, theNode);
                 float minAngle, maxAngle;
                 if(Float.isNaN(entry.incomingAngle)) {
@@ -62,6 +81,21 @@ public class VisualizerView {
                 }
             }
         }
+
         // TODO draw connections between rooms, labels, etc
+        for(Map.Entry<Room, GraphCanvas.CircularNode> visualizedRoom : seenRooms.entrySet()) {
+            for(Map.Entry<Connection, Room> connection : visualizedRoom.getKey().getPassages().entrySet()) {
+                if (connection.getValue() == visualizedRoom.getKey() || connection.getValue() == null) {
+                    // We do not draw anything for self-loops or end-of-game passages.
+                    continue;
+                }
+                // Draw a connection between the given rooms
+                GraphCanvas.CircularNode destination = seenRooms.get(connection.getValue());
+                if(destination == null) {
+                    throw new IllegalStateException("There is a connection from room %d->%d, but no node".formatted(visualizedRoom.getKey().getRoomNumber(), connection.getValue().getRoomNumber()));
+                }
+                canvas.connectNodes(visualizedRoom.getValue(), destination);
+            }
+        }
     }
 }

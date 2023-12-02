@@ -1,10 +1,14 @@
 package gptfx;
 
+import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,24 +26,35 @@ public class GraphCanvas extends Canvas {
         connections = new ArrayList<>();
     }
 
-    public CircularNode addNode(double x, double y, double radius) {
-        CircularNode node = new CircularNode(x, y, radius);
+    public CircularNode addNode(double x, double y, double radius, String name) {
+        CircularNode node = new CircularNode(x, y, radius, name);
         nodes.add(node);
         redrawCanvas();
         return node;
     }
 
-    public void connectNodes(int index1, int index2) {
-        if (index1 >= 0 && index1 < nodes.size() && index2 >= 0 && index2 < nodes.size()) {
-            connections.add(new Connection(nodes.get(index1), nodes.get(index2)));
-            redrawCanvas();
-        }
+    public void connectNodes(CircularNode src, CircularNode dst) {
+        connections.add(new Connection(src, dst));
+        redrawCanvas();
     }
 
-    private void redrawCanvas() {
+    private void clearBackground() {
         GraphicsContext gc = getGraphicsContext2D();
         gc.setFill(Color.BLACK);
         gc.fillRect(0, 0, getWidth(), getHeight());
+    }
+
+    public void clear() {
+        clearBackground();
+
+        nodes.clear();
+        connections.clear();
+    }
+
+    private void redrawCanvas() {
+        clearBackground();
+
+        GraphicsContext gc = getGraphicsContext2D();
 
         for (Connection connection : connections) {
             connection.draw(gc);
@@ -50,20 +65,15 @@ public class GraphCanvas extends Canvas {
         }
     }
 
-    public static class CircularNode {
-        private double x;
-        private double y;
-        private double radius;
-
-        CircularNode(double x, double y, double radius) {
-            this.x = x;
-            this.y = y;
-            this.radius = radius;
-        }
-
+    public record CircularNode(double x, double y, double radius, String label) {
         void draw(GraphicsContext gc) {
             gc.setFill(Color.BLUE);
             gc.fillOval(x - radius, y - radius, 2 * radius, 2 * radius);
+            gc.setFill(Color.WHITE);
+            gc.setFont(new Font(24));
+            gc.setTextAlign(TextAlignment.CENTER.CENTER);
+            gc.setTextBaseline(VPos.CENTER);
+            gc.fillText(label, x, y);
         }
     }
 
@@ -77,9 +87,37 @@ public class GraphCanvas extends Canvas {
         }
 
         public void draw(GraphicsContext gc) {
-            gc.setStroke(Color.BLACK);
+
+            gc.setStroke(Color.WHITE);
             gc.setLineWidth(2);
-            gc.strokeLine(node1.x, node1.y, node2.x, node2.y);
+
+            double angle = Math.atan2(node2.y - node1.y, node2.x - node1.x);
+            double arrowSize = 10;
+
+            // Offset to put the points et so that it isn't behind the node
+            double x1Reduction = (node1.radius * Math.cos(angle));
+            double y1Reduction = (node1.radius * Math.sin(angle));
+            double x2Reduction = (node2.radius * Math.cos(angle));
+            double y2Reduction = (node2.radius * Math.sin(angle));
+
+            // Draw line
+            gc.strokeLine(node1.x + x1Reduction, node1.y + y1Reduction, node2.x - x2Reduction, node2.y - y2Reduction);
+
+
+
+            // Draw arrowhead at the end of the line
+            drawArrowhead(gc, node2.x - x2Reduction, node2.y - y2Reduction, angle, arrowSize);
+        }
+
+        private void drawArrowhead(GraphicsContext gc, double x, double y, double angle, double arrowSize) {
+            double arrowheadAngle = Math.toRadians(30);
+            double x1 = x - arrowSize * Math.cos(angle - arrowheadAngle);
+            double y1 = y - arrowSize * Math.sin(angle - arrowheadAngle);
+            double x2 = x - arrowSize * Math.cos(angle + arrowheadAngle);
+            double y2 = y - arrowSize * Math.sin(angle + arrowheadAngle);
+
+            gc.setFill(Color.WHITE);
+            gc.fillPolygon(new double[]{x, x1, x2}, new double[]{y, y1, y2}, 3);
         }
     }
 }
