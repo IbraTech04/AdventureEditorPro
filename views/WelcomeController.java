@@ -1,11 +1,11 @@
 package views;
 
+import TTS.Free_TTS;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-import Free_TTS.*;
 
 import java.io.File;
 
@@ -23,7 +23,7 @@ public class WelcomeController {
      * @param actionEvent the event that triggered this method
      * @author Ibrahim Chehab
      */
-    TTS tts = new TTS();
+    Free_TTS tts = new Free_TTS();
 
 
 
