@@ -1,14 +1,17 @@
 package AdventureController;
 
 import AdventureModel.AdventureGame;
+import AdventureModel.AdventureSaver;
 import AdventureModel.Connection;
 import AdventureModel.Room;
+import views.ErrorDialog;
 import views.FolderChooseDialog;
 import views.ViewAdventureEditor;
 import views.VisualizerView;
 
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
@@ -124,6 +127,19 @@ public class Controller {
         File choice = FolderChooseDialog.getSelectedFolder(view.getStage());
         if(choice != null) {
             AdventureBootstrap.loadAndDisplayGame(choice.getName());
+        }
+    }
+
+    public void onSaveRequest() {
+        // Display system folder selection dialog
+        File choice = FolderChooseDialog.getSelectedFolder(view.getStage());
+        if(choice != null) {
+            AdventureSaver saver = new AdventureSaver(this.model, choice.getName());
+            try {
+                saver.saveGame();
+            } catch(IOException e) {
+                ErrorDialog.showAndWait("Error saving file: " + e);
+            }
         }
     }
 }

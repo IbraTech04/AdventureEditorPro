@@ -98,7 +98,7 @@ public class ViewAdventureEditor {
         fileMenu.getItems().add(loadFile);
         //Create Save Item
         MenuItem saveFile = new MenuItem("_Save...");
-        saveFile.setOnAction(e -> handleSaveFile());
+        saveFile.setOnAction(e -> this.controller.onSaveRequest());
         fileMenu.getItems().add(saveFile);
         fileMenu.getItems().add(new SeparatorMenuItem());
         //Create Exit Item
@@ -452,13 +452,6 @@ public class ViewAdventureEditor {
 
     //------------------------------------------------------------------------------------------------------------------
     // Handle Methods Begin
-
-    /**
-     * handleSaveFile
-     */
-    private void handleSaveFile() {
-        SaveView saveView = new SaveView(this);
-    }
 
     /**
      * handleExit
