@@ -1,14 +1,14 @@
 package gptfx;
 
+import javafx.geometry.Point2D;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,21 +20,37 @@ public class GraphCanvas extends Canvas {
     private List<CircularNode> nodes;
     private List<Connection> connections;
 
+    private double renderOffsetX, renderOffsetY;
+    private Point2D currentDragPoint;
+
     public GraphCanvas(double width, double height) {
         super(width, height);
+        this.setOnMousePressed(this::onDragStart);
+        this.setOnMouseDragged(this::onDrag);
         nodes = new ArrayList<>();
         connections = new ArrayList<>();
     }
 
+    private void onDragStart(MouseEvent event) {
+        currentDragPoint = new Point2D(event.getScreenX(), event.getScreenY());
+    }
+
+    private void onDrag(MouseEvent event) {
+        renderOffsetX += event.getScreenX() - currentDragPoint.getX();
+        renderOffsetY += event.getScreenY() - currentDragPoint.getY();
+        currentDragPoint = new Point2D(event.getScreenX(), event.getScreenY());
+        redrawCanvas();
+    }
+
     public CircularNode addNode(double x, double y, double radius, String name) {
-        CircularNode node = new CircularNode(x, y, radius, name);
+        CircularNode node = new CircularNode(this, x, y, radius, name);
         nodes.add(node);
         redrawCanvas();
         return node;
     }
 
     public void connectNodes(CircularNode src, CircularNode dst) {
-        connections.add(new Connection(src, dst));
+        connections.add(new Connection(this, src, dst));
         redrawCanvas();
     }
 
@@ -65,27 +81,19 @@ public class GraphCanvas extends Canvas {
         }
     }
 
-    public record CircularNode(double x, double y, double radius, String label) {
+    public record CircularNode(GraphCanvas canvas, double x, double y, double radius, String label) {
         void draw(GraphicsContext gc) {
             gc.setFill(Color.BLUE);
-            gc.fillOval(x - radius, y - radius, 2 * radius, 2 * radius);
+            gc.fillOval(canvas.renderOffsetX + x - radius, canvas.renderOffsetY + y - radius, 2 * radius, 2 * radius);
             gc.setFill(Color.WHITE);
             gc.setFont(new Font(24));
-            gc.setTextAlign(TextAlignment.CENTER.CENTER);
+            gc.setTextAlign(TextAlignment.CENTER);
             gc.setTextBaseline(VPos.CENTER);
-            gc.fillText(label, x, y);
+            gc.fillText(label, canvas.renderOffsetX + x, canvas.renderOffsetY + y);
         }
     }
 
-    private static class Connection {
-        private CircularNode node1;
-        private CircularNode node2;
-
-        public Connection(CircularNode node1, CircularNode node2) {
-            this.node1 = node1;
-            this.node2 = node2;
-        }
-
+    private record Connection(GraphCanvas canvas, CircularNode node1, CircularNode node2) {
         public void draw(GraphicsContext gc) {
 
             gc.setStroke(Color.WHITE);
@@ -101,12 +109,13 @@ public class GraphCanvas extends Canvas {
             double y2Reduction = (node2.radius * Math.sin(angle));
 
             // Draw line
-            gc.strokeLine(node1.x + x1Reduction, node1.y + y1Reduction, node2.x - x2Reduction, node2.y - y2Reduction);
+            gc.strokeLine(canvas.renderOffsetX + node1.x + x1Reduction, canvas.renderOffsetY + node1.y + y1Reduction,
+                    canvas.renderOffsetX + node2.x - x2Reduction, canvas.renderOffsetY + node2.y - y2Reduction);
 
 
 
             // Draw arrowhead at the end of the line
-            drawArrowhead(gc, node2.x - x2Reduction, node2.y - y2Reduction, angle, arrowSize);
+            drawArrowhead(gc, canvas.renderOffsetX + node2.x - x2Reduction, canvas.renderOffsetY + node2.y - y2Reduction, angle, arrowSize);
         }
 
         private void drawArrowhead(GraphicsContext gc, double x, double y, double angle, double arrowSize) {
