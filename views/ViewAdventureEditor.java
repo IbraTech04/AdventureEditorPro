@@ -70,6 +70,10 @@ public class ViewAdventureEditor {
         intiUI();
     }
 
+    public Stage getStage() {
+        return this.stage;
+    }
+
     public void setController(Controller controller) {
         if(this.controller != null)
             throw new IllegalStateException("Already attached a controller");
@@ -90,7 +94,7 @@ public class ViewAdventureEditor {
         Menu fileMenu = new Menu("_File");
         //Create Load Item
         MenuItem loadFile = new MenuItem("_Load...");
-        loadFile.setOnAction(e -> handleLoadFile());
+        loadFile.setOnAction(e -> this.controller.onLoadRequest());
         fileMenu.getItems().add(loadFile);
         //Create Save Item
         MenuItem saveFile = new MenuItem("_Save...");
@@ -448,13 +452,6 @@ public class ViewAdventureEditor {
 
     //------------------------------------------------------------------------------------------------------------------
     // Handle Methods Begin
-
-    /**
-     * handleLoadFile
-     */
-    private void handleLoadFile() {
-        LoadView loadView = new LoadView(this);
-    }
 
     /**
      * handleSaveFile

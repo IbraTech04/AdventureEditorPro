@@ -3,10 +3,12 @@ package AdventureController;
 import AdventureModel.AdventureGame;
 import AdventureModel.Connection;
 import AdventureModel.Room;
+import views.FolderChooseDialog;
 import views.ViewAdventureEditor;
 import views.VisualizerView;
 
 
+import java.io.File;
 import java.util.Collection;
 import java.util.List;
 
@@ -115,5 +117,13 @@ public class Controller {
 
     public void visualizeGatesFromRoom(Room room) {
         new VisualizerView(room);
+    }
+
+    public void onLoadRequest() {
+        // Display system folder selection dialog
+        File choice = FolderChooseDialog.getSelectedFolder(view.getStage());
+        if(choice != null) {
+            AdventureBootstrap.loadAndDisplayGame(choice.getName());
+        }
     }
 }

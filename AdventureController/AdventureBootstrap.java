@@ -1,3 +1,5 @@
+package AdventureController;
+
 import AdventureController.Controller;
 import AdventureModel.AdventureGame;
 import javafx.stage.Stage;
