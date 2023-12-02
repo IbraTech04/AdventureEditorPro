@@ -82,7 +82,6 @@ public class VisualizerView {
             }
         }
 
-        // TODO draw connections between rooms, labels, etc
         for(Map.Entry<Room, GraphCanvas.CircularNode> visualizedRoom : seenRooms.entrySet()) {
             for(Map.Entry<Connection, Room> connection : visualizedRoom.getKey().getPassages().entrySet()) {
                 if (connection.getValue() == visualizedRoom.getKey() || connection.getValue() == null) {
