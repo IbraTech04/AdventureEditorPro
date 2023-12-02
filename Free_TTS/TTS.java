@@ -13,6 +13,10 @@ public class TTS implements freeTTS {
     private String voiceName;
     private Voice voice;
 
+    static {
+        System.setProperty("freetts.voices", "com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory");
+    }
+
     public TTS() {
         this.voiceName = VOICENAME_kevin;
         this.voice = VoiceManager.getInstance().getVoice(this.voiceName);
@@ -20,7 +24,6 @@ public class TTS implements freeTTS {
     }
 
     public void speak(String text) {
-        System.setProperty("freetts.voices", "com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory");
         this.voice.speak(text);
     }
 
