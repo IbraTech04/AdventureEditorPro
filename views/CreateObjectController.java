@@ -10,6 +10,10 @@ import java.io.*;
 import javafx.event.ActionEvent;
 import javafx.stage.FileChooser;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.Button;
+import javafx.stage.FileChooser;
+import java.io.File;
 
 /**
  * CreateObjectController Class
@@ -96,13 +100,21 @@ public class CreateObjectController {
         Stage stage = (Stage) addImageButton.getScene().getWindow();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select Image");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg"));
-        File selectedFile = fileChooser.showOpenDialog(stage);
-        if (selectedFile != null) {
-            this.objectImage = selectedFile.getAbsolutePath();
-            Image image = new Image("file:" + objectImage);
-            objectImageView.setImage(image);
+        File file = fileChooser.showOpenDialog(stage);
+        if (file != null) {
+            objectImage = file.getAbsolutePath();
+            if (objectImage.endsWith(".png") || objectImage.endsWith(".jpg")) {
+                Image roomImageFile = new Image("file:///" + objectImage);
+                objectImageView.setImage(roomImageFile);
+                objectImageView.setPreserveRatio(true);
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Invalid File Type");
+                alert.setContentText("Please select a .png or .jpg file");
+                alert.showAndWait();
+                throw new IllegalArgumentException("Invalid File Type");
+            }
         }
     }
 

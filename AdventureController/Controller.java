@@ -4,6 +4,7 @@ import AdventureModel.AdventureGame;
 import AdventureModel.AdventureObject;
 import AdventureModel.Connection;
 import AdventureModel.Room;
+import javafx.scene.control.Alert;
 import views.ViewAdventureEditor;
 
 
@@ -107,15 +108,26 @@ public class Controller {
         if(isEndRoom) {
             // If the room ID is 1, raise an error (you can't make the first room an end room)
             if (room.getRoomNumber() == 1) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Room Error");
+                alert.setContentText("You cannot make the starting room an end room.");
+                alert.showAndWait();
                 view.forceUncheckEnd();
                 throw new IllegalArgumentException("You can't make the starting room an end room!");
             } else{
-                // Change this for a different implementation
-                room.deleteAllGates(); // Delete all gates from the room
-                this.addGateToRoom(room, null, "FORCED"); //The only gate is a forced gate to null
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Warning");
+                alert.setHeaderText("Are you sure you want to make this room an end room?");
+                alert.setContentText("All gates from this room will be removed.");
+                alert.showAndWait();
+                if (alert.getResult().getText().equals("OK")) { // If the user clicks OK
+                    room.deleteAllGates(); // Delete all gates from the room
+                    this.addGateToRoom(room, null, "FORCED"); //The only gate is a forced gate to null
+                }
             }
         } else {
-            this.deleteGateFromRoom(room, new Connection("FORCED", null)); // Delete the forced gate
+            room.deleteAllGates();// Delete all gates from the room
         }
         view.updateAllRooms(getAllRooms());
     }
@@ -129,18 +141,31 @@ public class Controller {
     public void deleteRoom(Room room) {
         // If the room ID is 1, raise an error (you can't delete the first room)
         if(room.getRoomNumber() == 1) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Deletion Error");
+            alert.setContentText("You cannot delete the starting room.");
+            alert.showAndWait();
             throw new IllegalArgumentException("You can't delete the starting room!");
         }
-        model.deleteRoom(room);
-        for (Room r : getAllRooms()) {
-            while (r.getPassages().containsValue(room)) {
-                String direction = r.getPassages().entrySet().stream().filter(entry -> Objects.equals(entry.getValue(), room)).findFirst().get().getKey().direction();
-                String object = r.getPassages().entrySet().stream().filter(entry -> Objects.equals(entry.getValue(), room)).findFirst().get().getKey().lock();
-                r.deleteGate(direction, object);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Warning");
+        alert.setHeaderText("Are you sure you want to delete this room?");
+        alert.setContentText("This action cannot be undone.");
+        alert.showAndWait();
+        if (alert.getResult().getText().equals("OK")) { // If the user clicks OK
+            // Delete the room
+            model.deleteRoom(room);
+            for (Room r : getAllRooms()) {
+                while (r.getPassages().containsValue(room)) {
+                    String direction = r.getPassages().entrySet().stream().filter(entry -> Objects.equals(entry.getValue(), room)).findFirst().get().getKey().direction();
+                    String object = r.getPassages().entrySet().stream().filter(entry -> Objects.equals(entry.getValue(), room)).findFirst().get().getKey().lock();
+                    r.deleteGate(direction, object);
+                }
             }
+            view.updateAllGates(room.getPassages());
+            view.updateAllRooms(getAllRooms());
         }
-        view.updateAllGates(room.getPassages());
-        view.updateAllRooms(getAllRooms());
     }
 
     /**
@@ -182,9 +207,16 @@ public class Controller {
      */
     public void deleteGateFromRoom(Room room1, Connection pair) {
         // Step 1: Delete the gate from the room
-        room1.getPassages().remove(pair);
-        // Step 2: Update the view
-        view.updateAllGates(room1.getPassages());
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Warning");
+        alert.setHeaderText("Are you sure you want to delete this gate?");
+        alert.setContentText("This action cannot be undone.");
+        alert.showAndWait();
+        if (alert.getResult().getText().equals("OK")) {
+            room1.getPassages().remove(pair);
+            // Step 2: Update the view
+            view.updateAllGates(room1.getPassages());
+        }
     }
 
     /**
@@ -197,9 +229,8 @@ public class Controller {
      * @param objectImage Image path of object image
      */
     public void addObjectToRoom(Room room, String objectName, String objectDescription, String objectImage){
-        //TODO: Do this properly
+        //TODO: Add code here to add the object image to the image folder
         AdventureObject newObject = new AdventureObject(objectName, objectDescription, room);
-        //Add code here to add the object image to the image folder
         room.addGameObject(newObject);
         view.updateAllObjects(room.getObjectsInRoom());
     }
@@ -213,8 +244,15 @@ public class Controller {
      */
     public void deleteObjectFromRoom(Room room, AdventureObject object){
         //Add code here to remove object image from the image folder
-        room.removeGameObject(object);
-        view.updateAllObjects(room.getObjectsInRoom());
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Warning");
+        alert.setHeaderText("Are you sure you want to delete this object?");
+        alert.setContentText("This action cannot be undone.");
+        alert.showAndWait();
+        if (alert.getResult().getText().equals("OK")){
+            room.removeGameObject(object);
+            view.updateAllObjects(room.getObjectsInRoom());
+        }
     }
 
 }

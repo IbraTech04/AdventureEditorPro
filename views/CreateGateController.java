@@ -147,27 +147,24 @@ public class CreateGateController {
      */
     public void handleCreateButton(ActionEvent event) {
         if (gateDirection.getText().isEmpty()) {
-            //TODO: Replace with Faizan's error message
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("Invalid Gate");
             alert.setContentText("Please enter a valid direction.");
             alert.showAndWait();
-            return;
+            throw new IllegalArgumentException("No direction entered");
         } else if (currentRoom.getEndStatus()){
-            //TODO: Replace with Faizan's error message
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("Invalid Gate");
             alert.setContentText("You cannot add a gate to an end room.");
             alert.showAndWait();
+            throw new IllegalArgumentException("You can't add a gate to an end room");
         }
         if (this.chosenObject != null) {
             mainController.addGateToRoom(currentRoom, chosenRoom, gateDirection.getText(), chosenObject.getName());
-            System.out.println("Added Gate from" + currentRoom.getRoomName() + " to " + chosenRoom.getRoomName() + " in direction " + gateDirection.getText() + " with object " + chosenObject.getName());
         } else {
-            mainController.addGateToRoom(currentRoom, chosenRoom, gateDirection.getText(), null);
-            System.out.println("Added Gate from" + currentRoom.getRoomName() + " to " + chosenRoom.getRoomName() + " in direction " + gateDirection.getText());
+            mainController.addGateToRoom(currentRoom, chosenRoom, gateDirection.getText());
         }
 
         Stage stage = (Stage) createButton.getScene().getWindow();
