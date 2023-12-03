@@ -7,6 +7,9 @@ import java.util.stream.Collectors;
 /**
  * This class contains the information about a 
  * room in the Adventure Game.
+ * Code partially generated in response to comments. GitHub CoPilot, 9 Mar. 2023, https://github.com/features/copilot
+ *
+ * @version 1.1
  */
 public class Room {
     /**
@@ -136,11 +139,10 @@ public class Room {
         return null;
     }
 
-
     /**
      * Getter method for the number attribute.
      *
-     * @return: number of the room
+     * @return number of the room
      */
     public int getRoomNumber(){
         return this.roomNumber;
@@ -149,58 +151,113 @@ public class Room {
     /**
      * Getter method for the description attribute.
      *
-     * @return: description of the room
+     * @return description of the room
      */
     public String getRoomDescription(){
         return this.roomDescription.replace("\n", " ");
     }
 
     /**
-     * Getter method for the description attribute.
+     * Getter method for the description attribute without new line char.
      *
-     * @return: description of the room
+     * @return description of the room
      */
     public String getUnsanitizedRoomDescription(){
         return this.roomDescription;
     }
 
-
     /**
      * Getter method for the name attribute.
      *
-     * @return: name of the room
+     * @return name of the room
      */
     public String getRoomName(){
         return this.roomName;
     }
 
+    /**
+     * Getter method for the end attribute.
+     *
+     * @return end status of the room
+     */
+    public boolean getEndStatus() {return this.passages.containsValue(null);}
+
+    /**
+     * Getter method for the start status of the room.
+     *
+     * @return start status of the room
+     */
+    public boolean getStartStatus() {return this.roomNumber == 1;}
 
     /**
      * Getter method for the visit attribute.
      *
-     * @return: visit status of the room
+     * @return visit status of the room
      */
     public boolean getVisited(){
         return this.isVisited;
     }
 
+    /**
+     * Getter method for the passages attribute.
+     *
+     * @return passages of the room
+     */
     public Map<Connection, Room> getPassages() {
         return this.passages;
     }
 
-    public void addGate(String direction, String object, Room room) {
-        this.passages.put(new Connection(direction, object), room);
-    }
+    /**
+     * Getter method for the objectsInRoom attribute.
+     *
+     * @return list of objects in the room
+     */
+    public Collection<AdventureObject> getObjectsInRoom() {return this.objectsInRoom;}
 
-    public void deleteGate(String direction, String object) {
-        this.passages.remove(new Connection(direction, object));
-    }
-
+    /**
+     * Setter method for the roomName attribute.
+     *
+     * @param roomName: number of the room
+     */
     public void setRoomName(String roomName) {
         this.roomName = roomName;
     }
 
+    /**
+     * Setter method for the roomDescription attribute.
+     *
+     * @param roomDescription: description of the room
+     */
     public void setRoomDescription(String roomDescription) {
         this.roomDescription = roomDescription;
     }
+
+    //-------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Adds a gate to the room.
+     *
+     * @param direction: direction of the gate
+     * @param object: lock for the gate
+     * @param room: room to be connected to
+     */
+    public void addGate(String direction, String object, Room room) {
+        this.passages.put(new Connection(direction, object), room);
+    }
+
+    /**
+     * Deletes a gate from the room.
+     *
+     * @param direction: direction of the gate
+     * @param object: lock for the gate
+     */
+    public void deleteGate(String direction, String object) {
+        this.passages.remove(new Connection(direction, object));
+    }
+
+    /**
+     * Clears all gates from the room.
+     */
+    public void deleteAllGates() {this.passages.clear();}
+
 }

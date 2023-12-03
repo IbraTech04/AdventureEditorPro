@@ -5,57 +5,80 @@ import AdventureModel.AdventureGame;
 import AdventureModel.AdventureObject;
 import AdventureModel.Connection;
 import AdventureModel.Room;
-import javafx.animation.PauseTransition;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.layout.*;
-import javafx.scene.input.KeyCode;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.util.Duration;
-import javafx.event.EventHandler; //you will need this too!
 import javafx.scene.AccessibleRole;
 import javafx.stage.FileChooser;
-import jdk.jfr.Event;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.*;
 
 /**
  * Class AdventureGameView.
- * //TODO: Update all print statements to load their respective popups
- * //TODO: Update all buttons to have ARIA standards
+ * Displays the main game view for the adventure game.
+ * Code partially generated in response to comments. GitHub CoPilot, 9 Mar. 2023, https://github.com/features/copilot
+ *
+ * @author Abigail Yanku
+ * @author Themba Dube
+ * @version 1.69
  */
 public class ViewAdventureEditor {
+    /**
+     * The main controller for the game.
+     */
     Controller controller;
     AdventureGame model; //model of the game //TODO: Remove when save and load are implemented
-    Stage stage; //stage on which all is rendered
-    BorderPane layout; //layout of the stage
+    /**
+     * The stage on which all is rendered.
+     */
+    Stage stage;
+    /**
+     * The layout of the game.
+     */
+    BorderPane layout;
+    /**
+     * The buttons for the game.
+     */
     Button runButton, addGateButton, addObjectButton, addRoomButton, imageButton, visualizeButton;
+    /**
+     * The labels for the game.
+     */
     Label imageLabel;
+    /**
+     * The text fields for the room.
+     */
     TextField nameField;
+    /**
+     * The text areas for the room.
+     */
     TextArea descriptionField;
+    /**
+     * The checkboxes for the room.
+     */
     CheckBox endCheckBox;
-    ScrollPane allRooms;
-    String ImagePath, RoomName, RoomDescription;
-    Boolean isStart, isEnd, isForced;
+    /**
+     * The image paths for the room.
+     */
+    String ImagePath;
+    /**
+     * The image view for the room.
+     */
     ImageView roomImageView;
-
-    ScrollPane gatePane, objectsPane;
-
+    /**
+     * The scroll panes for the game.
+     */
+    ScrollPane gatePane, objectsPane, allRooms;
+    /**
+     * The currently selected room.
+     */
     Room currentlySelectedRoom;
 
 
@@ -70,6 +93,12 @@ public class ViewAdventureEditor {
         intiUI();
     }
 
+    /**
+     * setController
+     * __________________________
+     * Sets the controller for the view
+     * @param controller the controller to set
+     */
     public void setController(Controller controller) {
         if(this.controller != null)
             throw new IllegalStateException("Already attached a controller");
@@ -145,6 +174,7 @@ public class ViewAdventureEditor {
         //-------------------------------------------------------------------------------------------------------------
         //Create Gate Scroll Pane and Label
         gatePane = new ScrollPane();
+        gatePane.setContent(createMiniGateView(Map.of()));
         gatePane.setPrefWidth(190);
         gatePane.setPrefHeight(500);
         Label gatesLabel = new Label("Gates to Current Room:  ");
@@ -158,11 +188,9 @@ public class ViewAdventureEditor {
 
         //Create Objects Scroll Pane
         objectsPane = new ScrollPane();
+        objectsPane.setContent(createMiniObjectView(List.of()));
         objectsPane.setPrefWidth(190);
         objectsPane.setPrefHeight(400);
-        GridPane objectsGrid = new GridPane();
-        GridPane.setColumnSpan(objectsGrid, 3);
-        objectsPane.setContent(objectsGrid);
         Label objectsLabel = new Label("Objects in Current Room:");
 
         // Build Right Pane
@@ -187,7 +215,7 @@ public class ViewAdventureEditor {
 
     /**
      * updateRoomView
-     * Updates the current room view with an empty room. //TODO: Implement loading of existing room
+     * Updates the current room view with an empty room.
      */
     public void updateRoomView() {
         if(currentlySelectedRoom == null) {
@@ -237,7 +265,7 @@ public class ViewAdventureEditor {
         Image defaultImageFile = new Image("assets/ahmed.jpg");
         roomImageView = new ImageView(defaultImageFile);
         roomImageView.setFitWidth(400);
-        roomImageView.setFitHeight(200); //TODO: Make this change according to image size
+        roomImageView.setFitHeight(200);
         HBox imageButtonLabel = new HBox();
         imageLabel = new Label("");
         imageButton = new Button("Add Image");
@@ -261,7 +289,8 @@ public class ViewAdventureEditor {
 
         //Add End Check Box
         endCheckBox = new CheckBox("End");
-        isEnd = true;
+        // Check the room's status and set the checkbox accordingly
+        endCheckBox.setSelected(currentlySelectedRoom.getEndStatus());
         endCheckBox.setOnAction(e -> handleEndCheckBox());
 
         //-------------------------------------------------------------------------------------------------------------
@@ -296,14 +325,19 @@ public class ViewAdventureEditor {
         
         this.layout.setCenter(roomView);
 
-        updateGates();
+        updateAllGates(currentlySelectedRoom.getPassages());
+        updateAllObjects(currentlySelectedRoom.getObjectsInRoom());
     }
+
+    //-------------------------------------------------------------------------------------------------------------
+    // Update Methods Begin
+    //-------------------------------------------------------------------------------------------------------------
 
     /**
      * updateAllRooms
      * Updates the allRooms ScrollPane anytime an edit is made, a room is added, or a room is deleted.
      */
-    public void updateAllRooms(Collection<Room> rooms) { //TODO: Integrate this method
+    public void updateAllRooms(Collection<Room> rooms) {
         allRooms.setContent(createMiniRoomView(rooms));
     }
 
@@ -311,10 +345,21 @@ public class ViewAdventureEditor {
      * updateAllGates
      * Updates the gatePane ScrollPane anytime an edit is made, a gate is added, or a gate is deleted.
      */
-    public void updateGates() { //TODO: Integrate this method
-        VBox gateList = new VBox();
-        gatePane.setContent(gateList);
+    public void updateAllGates(Map<Connection, Room> passages) {
+        gatePane.setContent(createMiniGateView(passages));
     }
+
+    /**
+     * updateAllObjects
+     * Updates the gatePane ScrollPane anytime an edit is made, a gate is added, or a gate is deleted.
+     */
+    public void updateAllObjects(Collection<AdventureObject> objects){
+        objectsPane.setContent(createMiniObjectView(objects));
+    }
+
+    //-------------------------------------------------------------------------------------------------------------
+    // Create Methods Begin
+    //-------------------------------------------------------------------------------------------------------------
 
     /**
      * createMiniRoomView
@@ -326,61 +371,44 @@ public class ViewAdventureEditor {
             //Create First Room Hbox
             HBox miniRoomView = new HBox();
 
-            //Add Delete and Edit Buttons \\TODO: Allow these buttons to edit and delete a specific room
-            VBox deleteEditButtons = new VBox();
-
             //Create Delete Button
             Image trashIcon = new Image("assets/trash_icon.png");
             ImageView trashIconView = new ImageView(trashIcon);
             trashIconView.setFitWidth(30);
             trashIconView.setFitHeight(30);
             Button deleteButton = new Button();
+            deleteButton.setPrefWidth(30);
+            deleteButton.setPrefHeight(80);
             // TODO: change currently selected room upon deletion if needed
             deleteButton.setOnAction(e -> controller.deleteRoom(room));
             deleteButton.setGraphic(trashIconView);
 
-            //Create Edit Button
-            Image editIcon = new Image("assets/edit_icon.png");
-            ImageView editIconView = new ImageView(editIcon);
-            editIconView.setFitWidth(30);
-            editIconView.setFitHeight(30);
-            Button editButton = new Button();
-            editButton.setOnAction(e -> handleEdit());
-            editButton.setGraphic(editIconView);
-
-            deleteEditButtons.getChildren().addAll(deleteButton, editButton);
-
 
             // Create Room Information Vbox
-            VBox firstRoomInfo = new VBox();
-            Label firstRoomLabel = new Label(room.getRoomName());
-            Label startLabel = new Label("Starting Room");
-            Label endLabel = new Label("Ending Room");
-            Label forcedLabel = new Label("Forced Room");
-            firstRoomInfo.getChildren().add(firstRoomLabel);
-
-            /*
-            if (isStart) {
-                firstRoomInfo.getChildren().add(startLabel); //If the room is the start room, add the start label
-            } else if (isEnd) {
-                firstRoomInfo.getChildren().add(endLabel); //If the room is the end room, add the end label
-            } else if (isForced) {
-                firstRoomInfo.getChildren().add(forcedLabel); //If the room is a forced room, add the forced label
+            VBox roomInfo = new VBox();
+            Label roomLabel = new Label(room.getRoomName());
+            if (room.getEndStatus()){
+                Label endLabel = new Label("This is an End Room.");
+                roomInfo.getChildren().addAll(roomLabel,endLabel);
+            } else if (room.getStartStatus()){
+                Label startLabel = new Label("The Start Room.");
+                roomInfo.getChildren().addAll(roomLabel,startLabel);
+            } else {
+                roomInfo.getChildren().add(roomLabel);
             }
-             */
 
-            firstRoomInfo.setPrefHeight(60);
-            firstRoomInfo.setPrefWidth(190);
-            firstRoomInfo.setAlignment(Pos.CENTER);
-            firstRoomInfo.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+            roomInfo.setPrefHeight(80);
+            roomInfo.setPrefWidth(190);
+            roomInfo.setAlignment(Pos.CENTER);
+            roomInfo.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
 
-            firstRoomInfo.setOnMouseClicked(e -> {
+            roomInfo.setOnMouseClicked(e -> {
                 currentlySelectedRoom = room;
                 updateRoomView();
             });
 
             // Add Room Info Vbox to Hbox
-            miniRoomView.getChildren().addAll(firstRoomInfo, deleteEditButtons);
+            miniRoomView.getChildren().addAll(roomInfo, deleteButton);
 
             roomList.getChildren().add(miniRoomView);
         }
@@ -392,17 +420,128 @@ public class ViewAdventureEditor {
      * createMiniGateView
      * Creates a mini gate view for the current room to another room.
      */
-    public HBox createMiniGateView() { //TODO: Implement this method
-        return new HBox();
+    public Node createMiniGateView(Map<Connection, Room> gates) {
+        VBox gateList = new VBox();
+        for(Connection gate : gates.keySet()) {
+            //Create First Room Hbox
+            HBox miniRoomView = new HBox();
+
+            //Create Delete Button
+            Image trashIcon = new Image("assets/trash_icon.png");
+            ImageView trashIconView = new ImageView(trashIcon);
+            trashIconView.setFitWidth(30);
+            trashIconView.setFitHeight(30);
+            Button deleteButton = new Button();
+            deleteButton.setPrefWidth(30);
+            deleteButton.setPrefHeight(80);
+            deleteButton.setOnAction(e -> controller.deleteGateFromRoom(currentlySelectedRoom, gate));
+            deleteButton.setGraphic(trashIconView);
+
+
+            // Create Gate Information Vbox
+            VBox GateInfo = new VBox();
+            if (gates.get(gate) != null){
+                Label GateLabel = new Label(gate.direction() + " to " + gates.get(gate).getRoomName());
+                if (gate.lock() != null){
+                    Label GateObject = new Label("With " + gate.lock());
+                    GateInfo.getChildren().addAll(GateObject, GateLabel);
+                } else {
+                    GateInfo.getChildren().add(GateLabel);
+                }
+            } else {
+                return new VBox();
+            }
+
+            GateInfo.setPrefHeight(80);
+            GateInfo.setPrefWidth(245);
+            GateInfo.setAlignment(Pos.CENTER);
+            GateInfo.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+
+            GateInfo.setOnMouseClicked(e -> {
+                currentlySelectedRoom = gates.get(gate);
+                updateRoomView();
+            });
+
+            // Add Room Info Vbox to Hbox
+            miniRoomView.getChildren().addAll(GateInfo, deleteButton);
+
+            gateList.getChildren().add(miniRoomView);
+        }
+
+        return gateList;
     }
 
+    /**
+     * createMiniObjectView
+     */
+    public Node createMiniObjectView(Collection<AdventureObject> objects) {
+        GridPane objectsGrid = new GridPane();
+        GridPane.setRowSpan(objectsGrid, 3);
+        //Create Column Constraints
+        int i = 0;
+        int j = 0;
+        for (AdventureObject o: objects){
+            VBox objectBox = new VBox();
+            //Create Image of Object
+            //TODO: Do this properly
+            Image image = new Image("assets/flower_icon.jpg");
+            ImageView imageView = new ImageView(image);
+            imageView.setFitHeight(100);
+            imageView.setFitWidth(148);
 
+            //Create Label and HBox for Delete Button
+            HBox labelAndDelete = new HBox();
+            labelAndDelete.setPrefWidth(148);
+            Label objectLabel = new Label(o.getName());
+            objectLabel.setPrefWidth(100);
+            objectLabel.setPadding(new Insets(10, 10, 10, 10));
+            objectLabel.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
+
+            //Create Delete Button
+            Image trashIcon = new Image("assets/trash_icon.png");
+            ImageView trashIconView = new ImageView(trashIcon);
+            trashIconView.setFitWidth(30);
+            trashIconView.setFitHeight(30);
+            Button deleteButton = new Button();
+            deleteButton.setPrefWidth(30);
+            deleteButton.setPrefHeight(30);
+            deleteButton.setAlignment(Pos.TOP_RIGHT);
+            deleteButton.setPadding(new Insets(10, 10, 10, 10));
+            deleteButton.setOnAction(e -> controller.deleteObjectFromRoom(currentlySelectedRoom, o));
+            deleteButton.setGraphic(trashIconView);
+
+            //Add Label and Delete Button to HBox
+            labelAndDelete.getChildren().addAll(objectLabel, deleteButton);
+            objectBox.getChildren().addAll(imageView, labelAndDelete);
+            objectBox.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+
+            //Add Object Box to GridPane
+            objectsGrid.add(objectBox, j, i);
+
+            //Increment i and j
+            if (j == 1){
+                i++;
+                j = 0;
+            } else{
+                j++;
+            }
+        }
+        return objectsGrid;
+    }
+
+    //-------------------------------------------------------------------------------------------------------------
+
+    /**
+     * forceUncheckEnd
+     * Forces the end checkbox to be unchecked
+     */
+    public void forceUncheckEnd() {
+        this.endCheckBox.setSelected(false);
+    }
 
     /**
      * makeButtonAccessible
      * __________________________
-     * For information about ARIA standards, see
-     * https://www.w3.org/WAI/standards-guidelines/aria/
      *
      * @param inputButton the button to add screenreader hooks to
      * @param name ARIA name
@@ -417,35 +556,9 @@ public class ViewAdventureEditor {
         inputButton.setFocusTraversable(true);
     }
 
-
-    /**
-     * handleNameField
-     * @param e the key event
-     */
-    private void handleNameField(KeyEvent e) { //TODO: Implement live updating of mini room view
-        if (e.getCode().equals(KeyCode.ENTER) || e.getCode().equals(KeyCode.TAB)){
-            this.RoomName = this.nameField.getText();
-            this.descriptionField.requestFocus();
-            System.out.println("Name Entered");
-        }
-
-    }
-
-    /**
-     * handleDescriptionField
-     * @param e the key event
-     */
-    private void handleDescriptionField(KeyEvent e) { //TODO: Implement live updating of mini room view
-        if (e.getCode().equals(KeyCode.ENTER) || e.getCode().equals(KeyCode.TAB)){
-            this.RoomDescription = this.descriptionField.getText();
-            this.addGateButton.requestFocus();
-            System.out.println("Description Entered");
-        }
-
-    }
-
     //------------------------------------------------------------------------------------------------------------------
     // Handle Methods Begin
+    //------------------------------------------------------------------------------------------------------------------
 
     /**
      * handleLoadFile
@@ -476,31 +589,10 @@ public class ViewAdventureEditor {
     }
 
     /**
-     * handleAddRoomButton
-     */
-    private void handleAddRoomButton() {
-        System.out.println("Add Room Button Pressed");
-    }
-
-    /**
      * handleVisualize
      */
     private void handleVisualize() {
         System.out.println("Visualize Button Pressed");
-    }
-
-    /**
-     * handleDelete
-     */
-    private void handleDelete() {
-        System.out.println("Delete Button Pressed");
-    }
-
-    /**
-     * handleEdit
-     */
-    private void handleEdit() {
-        System.out.println("Edit Button Pressed");
     }
 
     /**
@@ -514,20 +606,20 @@ public class ViewAdventureEditor {
      * handleAddObjectButton
      */
     private void handleAddObjectButton() {
-        CreateObject createObjectView = new CreateObject();
+        new CreateObject(controller, currentlySelectedRoom);
     }
 
     /**
      * handleAddGateButton
      */
     private void handleAddGateButton() {
-        CreateGate createGateView = new CreateGate();
+        new CreateGate(controller, currentlySelectedRoom);
     }
 
     /**
      * handleAddImage
      */
-    private void handleAddImage() {
+    private void handleAddImage() {//TODO: Do this properly
         File file = new FileChooser().showOpenDialog(stage);
         if (file != null) {
             ImagePath = file.getAbsolutePath();
@@ -535,25 +627,21 @@ public class ViewAdventureEditor {
                 imageLabel.setText("");
                 Image roomImageFile = new Image("file:///" + ImagePath);
                 roomImageView.setImage(roomImageFile);
+                roomImageView.setPreserveRatio(true);
             } else {
                 imageLabel.setText("  File must be of type .png or .jpg");
             }
         }
-
     }
-
 
     /**
      * handleEndCheckBox
      */
-    private void handleEndCheckBox() { //TODO: Implement live updating of mini room view
-        if (this.endCheckBox.isSelected()){
-            this.isEnd = true;
-        } else {
-            this.isEnd = false;
-        }
-        System.out.println("Room End is " + this.isEnd);
+    private void handleEndCheckBox() {
+        //Update the end status of the room in the backend
+        controller.updateEndStatus(currentlySelectedRoom, this.endCheckBox.isSelected());
     }
+
 
 
 }
