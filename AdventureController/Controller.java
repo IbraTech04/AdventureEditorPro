@@ -6,6 +6,7 @@ import AdventureModel.Connection;
 import AdventureModel.Room;
 import javafx.scene.control.Alert;
 import views.ViewAdventureEditor;
+import views.VisualizerView;
 
 
 import java.util.ArrayList;
