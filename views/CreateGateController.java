@@ -137,8 +137,13 @@ public class CreateGateController {
      * @param event the event
      */
     public void handleIsForced(ActionEvent event) {
-        gateDirection.setText("FORCED");
+        if (isForced.isSelected()) {
+            gateDirection.setText("FORCED");
+        } else {
+            gateDirection.setText("");
+        }
         gateDirection.setDisable(isForced.isSelected());
+
     }
 
     /**
@@ -146,7 +151,7 @@ public class CreateGateController {
      * @param event the event
      */
     public void handleCreateButton(ActionEvent event) {
-        if (gateDirection.getText().isEmpty()) {
+        if (gateDirection.getText().isEmpty()||(gateDirection.getText().equals("FORCED") && !isForced.isSelected())) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("Invalid Gate");
