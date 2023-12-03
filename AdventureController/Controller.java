@@ -7,6 +7,11 @@ import AdventureModel.Room;
 import javafx.scene.control.Alert;
 import views.ViewAdventureEditor;
 import views.VisualizerView;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.AbstractMap;
+
 
 
 import java.util.*;
@@ -92,6 +97,27 @@ public class Controller {
      */
     public void updateRoomDescription(Room room, String description) {
         room.setRoomDescription(description);
+        view.updateAllRooms(getAllRooms());
+    }
+
+    /**
+     * updateRoomImage
+     * __________________________
+     * Updates the image of a room
+     * @param room Room to update image of
+     * @param image New image of room
+     */
+    public void updateRoomImage(Room room, String image) {
+        String filePath = model.getDirectoryName();
+        if (!Files.exists(Path.of(filePath + "/room-images"))) {
+            try {
+                Files.createDirectory(Path.of(filePath + "/room-images"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+
         view.updateAllRooms(getAllRooms());
     }
 

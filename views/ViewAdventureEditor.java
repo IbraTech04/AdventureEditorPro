@@ -627,14 +627,7 @@ public class ViewAdventureEditor {
         File file = new FileChooser().showOpenDialog(stage);
         if (file != null) {
             ImagePath = file.getAbsolutePath();
-            if (ImagePath.endsWith(".png") || ImagePath.endsWith(".jpg")) {
-                imageLabel.setText("");
-                Image roomImageFile = new Image("file:///" + ImagePath);
-                roomImageView.setImage(roomImageFile);
-                roomImageView.setPreserveRatio(true);
-            } else {
-                imageLabel.setText("  File must be of type .png or .jpg");
-            }
+            controller.updateRoomImage(currentlySelectedRoom, ImagePath);
         }
     }
 

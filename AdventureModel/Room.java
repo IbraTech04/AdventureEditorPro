@@ -233,7 +233,7 @@ public class Room {
         this.roomDescription = roomDescription;
     }
 
-    //-------------------------------------------------------------------------------------------------------------
+
 
     /**
      * Adds a gate to the room.
