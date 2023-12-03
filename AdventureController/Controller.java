@@ -11,6 +11,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.AbstractMap;
+import java.nio.file.StandardCopyOption;
 
 
 
@@ -101,17 +102,21 @@ public class Controller {
     }
 
     /**
-     * updateRoomImage
+     * updateImage
      * __________________________
-     * Updates the image of a room
-     * @param room Room to update image of
-     * @param image New image of room
+     * Updates the image of a room or object
+     * @param room Room or Object to update image of
+     * @param imagename Name of  image of room or object
      */
-    public void updateRoomImage(Room room, String image) {
+    public void updateImage(File selectedFile, Room room, String folder, String imagename) {
         String filePath = model.getDirectoryName();
-        if (!Files.exists(Path.of(filePath + "/room-images"))) {
+        Path sourcePath = selectedFile.toPath();
+        String desttofolder = filePath + File.separator + folder;
+        Path destinationPath = Path.of(desttofolder + File.separator + imagename);
+        if (!Files.exists(Path.of(desttofolder))) {
             try {
-                Files.createDirectory(Path.of(filePath + "/room-images"));
+                Files.createDirectory(Path.of(desttofolder));
+                Files.copy(sourcePath, destinationPath, StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -253,12 +258,13 @@ public class Controller {
      * @param room Room to add object to
      * @param objectName Name of object
      * @param objectDescription Description of object
-     * @param objectImage Image path of object image
+     * @param imageFile File of object image
      */
-    public void addObjectToRoom(Room room, String objectName, String objectDescription, String objectImage){
+    public void addObjectToRoom(Room room, String objectName, String objectDescription, File imageFile, String dest) {
         //TODO: Add code here to add the object image to the image folder
         AdventureObject newObject = new AdventureObject(objectName, objectDescription, room);
         room.addGameObject(newObject);
+        updateImage(imageFile, room, dest, objectName);
         view.updateAllObjects(room.getObjectsInRoom());
     }
 

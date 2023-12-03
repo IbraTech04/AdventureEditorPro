@@ -19,6 +19,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.AccessibleRole;
 import javafx.stage.FileChooser;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.*;
 
 /**
@@ -624,10 +628,14 @@ public class ViewAdventureEditor {
      * handleAddImage
      */
     private void handleAddImage() {//TODO: Do this properly
-        File file = new FileChooser().showOpenDialog(stage);
-        if (file != null) {
-            ImagePath = file.getAbsolutePath();
-            controller.updateRoomImage(currentlySelectedRoom, ImagePath);
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose Image File");
+        File selectedFile = fileChooser.showOpenDialog(stage);
+        if (selectedFile != null) {
+            ImagePath = selectedFile.getAbsolutePath();
+            String dest = "room-images";
+            String name = "" + currentlySelectedRoom.getRoomNumber();
+            controller.updateImage(selectedFile, currentlySelectedRoom, dest, name);
         }
     }
 

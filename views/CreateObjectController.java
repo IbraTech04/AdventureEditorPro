@@ -46,6 +46,8 @@ public class CreateObjectController {
      */
     String objectImage;
 
+    File imageFile;
+
     @FXML
     private TextField objectNameField;
     @FXML
@@ -100,9 +102,9 @@ public class CreateObjectController {
         Stage stage = (Stage) addImageButton.getScene().getWindow();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select Image");
-        File file = fileChooser.showOpenDialog(stage);
-        if (file != null) {
-            objectImage = file.getAbsolutePath();
+        imageFile = fileChooser.showOpenDialog(stage);
+        if (imageFile != null) {
+            objectImage = imageFile.getAbsolutePath();
             if (objectImage.endsWith(".png") || objectImage.endsWith(".jpg")) {
                 Image roomImageFile = new Image("file:///" + objectImage);
                 objectImageView.setImage(roomImageFile);
@@ -125,7 +127,8 @@ public class CreateObjectController {
      * @param event The event
      * */
     public void handleCreateButton(ActionEvent event) {
-        mainController.addObjectToRoom(currentRoom, objectName, objectDescription, objectImage);
+        String dest = "objectImages";
+        mainController.addObjectToRoom(currentRoom, objectName, objectDescription, imageFile, dest);
         Stage stage = (Stage) createButton.getScene().getWindow();
         stage.close();
     }
