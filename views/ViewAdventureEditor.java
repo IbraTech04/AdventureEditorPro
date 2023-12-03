@@ -541,6 +541,8 @@ public class ViewAdventureEditor {
         this.endCheckBox.setSelected(false);
     }
 
+    public Room getCurrentlySelectedRoom() {return this.currentlySelectedRoom;}
+
     /**
      * makeButtonAccessible
      * __________________________
@@ -641,6 +643,6 @@ public class ViewAdventureEditor {
      */
     private void handleEndCheckBox() {
         //Update the end status of the room in the backend
-        controller.updateEndStatus(currentlySelectedRoom, this.endCheckBox.isSelected());
+        controller.updateEndStatus(currentlySelectedRoom, endCheckBox.isSelected());
     }
 }

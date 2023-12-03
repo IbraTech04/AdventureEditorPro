@@ -9,10 +9,7 @@ import views.ViewAdventureEditor;
 import views.VisualizerView;
 
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Controller Class
@@ -116,7 +113,7 @@ public class Controller {
                 alert.showAndWait();
                 view.forceUncheckEnd();
                 throw new IllegalArgumentException("You can't make the starting room an end room!");
-            } else{
+            } else {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Warning");
                 alert.setHeaderText("Are you sure you want to make this room an end room?");
@@ -125,12 +122,15 @@ public class Controller {
                 if (alert.getResult().getText().equals("OK")) { // If the user clicks OK
                     room.deleteAllGates(); // Delete all gates from the room
                     this.addGateToRoom(room, null, "FORCED"); //The only gate is a forced gate to null
+                } else {
+                    view.forceUncheckEnd();
                 }
             }
         } else {
             room.deleteAllGates();// Delete all gates from the room
         }
         view.updateAllRooms(getAllRooms());
+        view.updateAllGates(room.getPassages());
     }
 
     /**
@@ -164,7 +164,7 @@ public class Controller {
                     r.deleteGate(direction, object);
                 }
             }
-            view.updateAllGates(room.getPassages());
+            view.updateAllGates(view.getCurrentlySelectedRoom().getPassages());
             view.updateAllRooms(getAllRooms());
         }
     }
@@ -255,5 +255,15 @@ public class Controller {
             view.updateAllObjects(room.getObjectsInRoom());
         }
     }
+
+    /**
+     * visualizeGatesFromRoom
+     * __________________________
+     * Visualizes the gates from a room
+     */
+    public void visualizeGatesFromRoom(Room room) {
+        new VisualizerView(room);
+    }
+
 
 }

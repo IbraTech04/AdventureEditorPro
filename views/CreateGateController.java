@@ -83,6 +83,7 @@ public class CreateGateController {
             }
         });
         listRooms.getSelectionModel().selectFirst();
+        this.chosenRoom = listRooms.getValue();
         listRooms.setOnAction(this::updateGateRoom);
     }
 
@@ -93,7 +94,6 @@ public class CreateGateController {
     public void updateGateRoom(ActionEvent event) {
         this.chosenRoom = listRooms.getValue();
     }
-
     /**
      * setObjectList
      * @param objects the objects in the game
@@ -160,11 +160,12 @@ public class CreateGateController {
             alert.setContentText("You cannot add a gate to an end room.");
             alert.showAndWait();
             throw new IllegalArgumentException("You can't add a gate to an end room");
-        }
-        if (this.chosenObject != null) {
-            mainController.addGateToRoom(currentRoom, chosenRoom, gateDirection.getText(), chosenObject.getName());
-        } else {
-            mainController.addGateToRoom(currentRoom, chosenRoom, gateDirection.getText());
+        } else{
+            if (this.chosenObject != null) {
+                mainController.addGateToRoom(currentRoom, chosenRoom, gateDirection.getText(), chosenObject.getName());
+            } else {
+                mainController.addGateToRoom(currentRoom, chosenRoom, gateDirection.getText());
+            }
         }
 
         Stage stage = (Stage) createButton.getScene().getWindow();
