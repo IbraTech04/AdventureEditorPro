@@ -252,10 +252,10 @@ public class ViewAdventureEditor {
         nameField = new TextField();
         nameField.setPrefWidth(400);
         nameField.setPromptText("Choose a Room Name");
+        nameField.setText(currentlySelectedRoom.getRoomName());
         nameField.textProperty().addListener((observable, old, newVal) -> {
             controller.updateRoomName(currentlySelectedRoom, newVal);
         });
-        nameField.setText(currentlySelectedRoom.getRoomName());
         //Add description label
         Label descriptionLabel = new Label("Room Description:");
         //Add description text field
@@ -264,10 +264,10 @@ public class ViewAdventureEditor {
         descriptionField.setPrefHeight(200);
         descriptionField.setPromptText("Enter a Room Description");
         descriptionField.wrapTextProperty().setValue(true);
+        descriptionField.setText(currentlySelectedRoom.getUnsanitizedRoomDescription());
         descriptionField.textProperty().addListener((observable, old, newVal) -> {
             controller.updateRoomDescription(currentlySelectedRoom, newVal);
         });
-        descriptionField.setText(currentlySelectedRoom.getUnsanitizedRoomDescription());
 
         //Add Default Image View (GridPane 2)
         GridPane roomViewG2 = new GridPane();
@@ -391,12 +391,13 @@ public class ViewAdventureEditor {
      */
     private Node createMiniRoomView(Collection<Room> rooms) {
         VBox roomList = new VBox();
+        Image trashIcon = new Image("assets/trash_icon.png");
+
         for(Room room : rooms) {
             //Create First Room Hbox
             HBox miniRoomView = new HBox();
 
             //Create Delete Button
-            Image trashIcon = new Image("assets/trash_icon.png");
             ImageView trashIconView = new ImageView(trashIcon);
             trashIconView.setFitWidth(30);
             trashIconView.setFitHeight(30);
@@ -445,12 +446,14 @@ public class ViewAdventureEditor {
      */
     public Node createMiniGateView(Map<Connection, Room> gates) {
         VBox gateList = new VBox();
+
+        Image trashIcon = new Image("assets/trash_icon.png");
+
         for(Connection gate : gates.keySet()) {
             //Create First Room Hbox
             HBox miniRoomView = new HBox();
 
             //Create Delete Button
-            Image trashIcon = new Image("assets/trash_icon.png");
             ImageView trashIconView = new ImageView(trashIcon);
             trashIconView.setFitWidth(30);
             trashIconView.setFitHeight(30);
@@ -503,6 +506,9 @@ public class ViewAdventureEditor {
         //Create Column Constraints
         int i = 0;
         int j = 0;
+
+        Image trashIcon = new Image("assets/trash_icon.png");
+
         for (AdventureObject o: objects){
             VBox objectBox = new VBox();
             //Create Image of Object
@@ -521,7 +527,6 @@ public class ViewAdventureEditor {
             objectLabel.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
 
             //Create Delete Button
-            Image trashIcon = new Image("assets/trash_icon.png");
             ImageView trashIconView = new ImageView(trashIcon);
             trashIconView.setFitWidth(30);
             trashIconView.setFitHeight(30);
