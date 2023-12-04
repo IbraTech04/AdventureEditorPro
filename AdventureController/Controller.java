@@ -115,17 +115,17 @@ public class Controller {
         Path sourcePath = selectedFile.toPath();
         String desttofolder = filePath + File.separator + folder;
         Path destinationPath = Path.of(desttofolder + File.separator + imagename);
-        if (!Files.exists(Path.of(desttofolder))) {
+        try {
             try {
                 Files.createDirectory(Path.of(desttofolder));
-                Files.copy(sourcePath, destinationPath, StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch(IOException ignored) { // dir already exists
             }
+            Files.copy(sourcePath, destinationPath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            Dialogs.showDialogAndWait(Alert.AlertType.ERROR, "Error adding image", e.toString());
         }
 
-
-        view.updateAllRooms(getAllRooms());
+        view.updateRoomView();
     }
 
     /**

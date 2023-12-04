@@ -19,6 +19,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.AccessibleRole;
 import javafx.stage.FileChooser;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -277,7 +278,15 @@ public class ViewAdventureEditor {
         //roomViewG2.gridLinesVisibleProperty().setValue(true);
 
         //Add Image View
-        Image defaultImageFile = new Image("assets/ahmed.jpg");
+
+        Image defaultImageFile;
+        try {
+            File file = new File(model.getDirectoryName() + "/room-images/" + currentlySelectedRoom.getRoomNumber() + ".png");
+            defaultImageFile = new Image(new FileInputStream(file));
+        } catch(RuntimeException | IOException e) { // image probably not found
+            e.printStackTrace();
+            defaultImageFile = null;
+        }
         roomImageView = new ImageView(defaultImageFile);
         roomImageView.setFitWidth(400);
         roomImageView.setFitHeight(200);
@@ -624,12 +633,15 @@ public class ViewAdventureEditor {
     private void handleAddImage() {//TODO: Do this properly
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose Image File");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG files", "*.png"));
         File selectedFile = fileChooser.showOpenDialog(stage);
-        if (selectedFile != null) {
+        if (selectedFile != null && selectedFile.getName().endsWith(".png")) {
             ImagePath = selectedFile.getAbsolutePath();
             String dest = "room-images";
-            String name = "" + currentlySelectedRoom.getRoomNumber();
+            String name = currentlySelectedRoom.getRoomNumber() + ".png";
             controller.updateImage(selectedFile, currentlySelectedRoom, dest, name);
+        } else {
+            Dialogs.showDialogAndWait(Alert.AlertType.ERROR, "Only .png files are accepted");
         }
     }
 
