@@ -101,6 +101,11 @@ public class ViewAdventureEditor {
         return this.stage;
     }
 
+    public void setCurrentlySelectedRoom(Room room) {
+        currentlySelectedRoom = room;
+        updateRoomView();
+    }
+
     /**
      * setController
      * __________________________
@@ -413,8 +418,7 @@ public class ViewAdventureEditor {
             roomInfo.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
 
             roomInfo.setOnMouseClicked(e -> {
-                currentlySelectedRoom = room;
-                updateRoomView();
+                setCurrentlySelectedRoom(room);
             });
 
             // Add Room Info Vbox to Hbox

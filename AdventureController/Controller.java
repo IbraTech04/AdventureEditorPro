@@ -179,6 +179,10 @@ public class Controller {
             }
             // Delete the room
             model.deleteRoom(room);
+            if(view.getCurrentlySelectedRoom() == room) {
+                // Move to the first room in the list
+                view.setCurrentlySelectedRoom(getAllRooms().iterator().next());
+            }
             view.updateAllGates(view.getCurrentlySelectedRoom().getPassages());
             view.updateAllRooms(getAllRooms());
         }
