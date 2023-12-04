@@ -188,15 +188,12 @@ public class Controller {
         alert.setContentText("This action cannot be undone.");
         alert.showAndWait();
         if (alert.getResult().getText().equals("OK")) { // If the user clicks OK
+            // Delete any passage with the now-deleted room as a destination
+            for (Room r : getAllRooms()) {
+                r.getPassages().entrySet().removeIf(e -> Objects.equals(e.getValue(), room));
+            }
             // Delete the room
             model.deleteRoom(room);
-            for (Room r : getAllRooms()) {
-                while (r.getPassages().containsValue(room)) {
-                    String direction = r.getPassages().entrySet().stream().filter(entry -> Objects.equals(entry.getValue(), room)).findFirst().get().getKey().direction();
-                    String object = r.getPassages().entrySet().stream().filter(entry -> Objects.equals(entry.getValue(), room)).findFirst().get().getKey().lock();
-                    r.deleteGate(direction, object);
-                }
-            }
             view.updateAllGates(view.getCurrentlySelectedRoom().getPassages());
             view.updateAllRooms(getAllRooms());
         }
