@@ -84,8 +84,8 @@ public class GraphCanvas extends Canvas {
      * @author Themba Dube
      */
     private void onDrag(MouseEvent event) {
-        renderOffsetX += event.getScreenX() - currentDragPoint.getX();
-        renderOffsetY += event.getScreenY() - currentDragPoint.getY();
+        renderOffsetX += (event.getScreenX() - currentDragPoint.getX()) / zoomTransform.getX();
+        renderOffsetY += (event.getScreenY() - currentDragPoint.getY()) / zoomTransform.getY();
         currentDragPoint = new Point2D(event.getScreenX(), event.getScreenY());
         redrawCanvas();
     }
