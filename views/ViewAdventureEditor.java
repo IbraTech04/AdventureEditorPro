@@ -97,6 +97,10 @@ public class ViewAdventureEditor {
         intiUI();
     }
 
+    public Stage getStage() {
+        return this.stage;
+    }
+
     /**
      * setController
      * __________________________
@@ -123,11 +127,11 @@ public class ViewAdventureEditor {
         Menu fileMenu = new Menu("_File");
         //Create Load Item
         MenuItem loadFile = new MenuItem("_Load...");
-        loadFile.setOnAction(e -> handleLoadFile());
+        loadFile.setOnAction(e -> this.controller.onLoadRequest());
         fileMenu.getItems().add(loadFile);
         //Create Save Item
         MenuItem saveFile = new MenuItem("_Save...");
-        saveFile.setOnAction(e -> handleSaveFile());
+        saveFile.setOnAction(e -> this.controller.onSaveRequest());
         fileMenu.getItems().add(saveFile);
         fileMenu.getItems().add(new SeparatorMenuItem());
         //Create Exit Item
@@ -567,20 +571,6 @@ public class ViewAdventureEditor {
     //------------------------------------------------------------------------------------------------------------------
     // Handle Methods Begin
     //------------------------------------------------------------------------------------------------------------------
-
-    /**
-     * handleLoadFile
-     */
-    private void handleLoadFile() {
-        LoadView loadView = new LoadView(this);
-    }
-
-    /**
-     * handleSaveFile
-     */
-    private void handleSaveFile() {
-        SaveView saveView = new SaveView(this);
-    }
 
     /**
      * handleExit

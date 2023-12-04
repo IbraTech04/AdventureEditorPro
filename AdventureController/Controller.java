@@ -2,20 +2,22 @@ package AdventureController;
 
 import AdventureModel.AdventureGame;
 import AdventureModel.AdventureObject;
+import AdventureModel.AdventureSaver;
 import AdventureModel.Connection;
 import AdventureModel.Room;
-import javafx.scene.control.Alert;
+import views.ErrorDialog;
+import views.FolderChooseDialog;
 import views.ViewAdventureEditor;
 import views.VisualizerView;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.AbstractMap;
 import java.nio.file.StandardCopyOption;
-
-
-
 import java.util.*;
+
+import javafx.scene.control.Alert;
+
+
 
 /**
  * Controller Class
@@ -297,5 +299,24 @@ public class Controller {
         new VisualizerView(room);
     }
 
+    public void onLoadRequest() {
+        // Display system folder selection dialog
+        File choice = FolderChooseDialog.getSelectedFolder(view.getStage());
+        if(choice != null) {
+            AdventureBootstrap.loadAndDisplayGame(choice.getName());
+        }
+    }
 
+    public void onSaveRequest() {
+        // Display system folder selection dialog
+        File choice = FolderChooseDialog.getSelectedFolder(view.getStage());
+        if(choice != null) {
+            AdventureSaver saver = new AdventureSaver(this.model, choice.getName());
+            try {
+                saver.saveGame();
+            } catch(IOException e) {
+                ErrorDialog.showAndWait("Error saving file: " + e);
+            }
+        }
+    }
 }

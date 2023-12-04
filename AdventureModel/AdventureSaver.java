@@ -18,7 +18,7 @@ public class AdventureSaver {
      */
     public AdventureSaver(AdventureGame game, String directoryName) {
         this.game = game;
-        this.adventureName = directoryName;
+        this.adventureName = "Games/" + directoryName;
     }
 
     public void saveGame() throws IOException {
