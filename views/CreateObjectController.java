@@ -110,11 +110,7 @@ public class CreateObjectController {
                 objectImageView.setImage(roomImageFile);
                 objectImageView.setPreserveRatio(true);
             } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Invalid File Type");
-                alert.setContentText("Please select a .png or .jpg file");
-                alert.showAndWait();
+                Dialogs.showDialogAndWait(Alert.AlertType.ERROR, "Invalid file type. Please select a .png or .jpg file.");
                 throw new IllegalArgumentException("Invalid File Type");
             }
         }

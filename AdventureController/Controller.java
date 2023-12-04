@@ -5,7 +5,7 @@ import AdventureModel.AdventureObject;
 import AdventureModel.AdventureSaver;
 import AdventureModel.Connection;
 import AdventureModel.Room;
-import views.ErrorDialog;
+import views.Dialogs;
 import views.FolderChooseDialog;
 import views.ViewAdventureEditor;
 import views.VisualizerView;
@@ -139,20 +139,12 @@ public class Controller {
         if(isEndRoom) {
             // If the room ID is 1, raise an error (you can't make the first room an end room)
             if (room.getRoomNumber() == 1) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Room Error");
-                alert.setContentText("You cannot make the starting room an end room.");
-                alert.showAndWait();
+                Dialogs.showDialogAndWait(Alert.AlertType.ERROR, "Room error. You cannot make the starting room an end room.");
                 view.forceUncheckEnd();
                 throw new IllegalArgumentException("You can't make the starting room an end room!");
             } else {
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Warning");
-                alert.setHeaderText("Are you sure you want to make this room an end room?");
-                alert.setContentText("All gates from this room will be removed.");
-                alert.showAndWait();
-                if (alert.getResult().getText().equals("OK")) { // If the user clicks OK
+                var result = Dialogs.showDialogAndWait(Alert.AlertType.CONFIRMATION, "Are you sure you want to make this room an end room?", "All gates from this room will be removed.");
+                if (result.getText().equals("OK")) { // If the user clicks OK
                     room.deleteAllGates(); // Delete all gates from the room
                     this.addGateToRoom(room, null, "FORCED"); //The only gate is a forced gate to null
                 } else {
@@ -175,19 +167,12 @@ public class Controller {
     public void deleteRoom(Room room) {
         // If the room ID is 1, raise an error (you can't delete the first room)
         if(room.getRoomNumber() == 1) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Deletion Error");
-            alert.setContentText("You cannot delete the starting room.");
-            alert.showAndWait();
+            Dialogs.showDialogAndWait(Alert.AlertType.ERROR, "You cannot delete the starting room.");
             throw new IllegalArgumentException("You can't delete the starting room!");
         }
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Warning");
-        alert.setHeaderText("Are you sure you want to delete this room?");
-        alert.setContentText("This action cannot be undone.");
-        alert.showAndWait();
-        if (alert.getResult().getText().equals("OK")) { // If the user clicks OK
+        var confirmResult = Dialogs.showDialogAndWait(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete this room?", "This action cannot be undone.");
+
+        if (confirmResult.getText().equals("OK")) { // If the user clicks OK
             // Delete any passage with the now-deleted room as a destination
             for (Room r : getAllRooms()) {
                 r.getPassages().entrySet().removeIf(e -> Objects.equals(e.getValue(), room));
@@ -238,12 +223,8 @@ public class Controller {
      */
     public void deleteGateFromRoom(Room room1, Connection pair) {
         // Step 1: Delete the gate from the room
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Warning");
-        alert.setHeaderText("Are you sure you want to delete this gate?");
-        alert.setContentText("This action cannot be undone.");
-        alert.showAndWait();
-        if (alert.getResult().getText().equals("OK")) {
+        var result = Dialogs.showDialogAndWait(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete this gate?", "This action cannot be undone.");
+        if (result.getText().equals("OK")) {
             room1.getPassages().remove(pair);
             // Step 2: Update the view
             view.updateAllGates(room1.getPassages());
@@ -276,12 +257,8 @@ public class Controller {
      */
     public void deleteObjectFromRoom(Room room, AdventureObject object){
         //Add code here to remove object image from the image folder
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Warning");
-        alert.setHeaderText("Are you sure you want to delete this object?");
-        alert.setContentText("This action cannot be undone.");
-        alert.showAndWait();
-        if (alert.getResult().getText().equals("OK")){
+        var result = Dialogs.showDialogAndWait(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete this object?", "This action cannot be undone.");
+        if (result.getText().equals("OK")){
             room.removeGameObject(object);
             view.updateAllObjects(room.getObjectsInRoom());
         }
@@ -312,7 +289,7 @@ public class Controller {
             try {
                 saver.saveGame();
             } catch(IOException e) {
-                ErrorDialog.showAndWait("Error saving file: " + e);
+                Dialogs.showDialogAndWait(Alert.AlertType.ERROR, "Error saving file: " + e);
             }
         }
     }

@@ -49,18 +49,8 @@ public class WelcomeController {
             System.out.println(selectedDirectory.getAbsolutePath());
             return;
         }
-        // TODO: REPLACE THIS WITH FAIZAN'S ERROR WINDOW
-        // THIS IS JUST TEMPORARY
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText(null); // Use null to hide the header text
-        alert.setContentText("No directory selected, please try again.");
 
-        // Set the owner of the alert to the primary stage (if available)
-        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-        stage.setAlwaysOnTop(true); // Make the error alert always on top
-
-        alert.showAndWait();
+        Dialogs.showDialogAndWait(Alert.AlertType.ERROR, "No directory selected, please try again.");
     }
 
     /**

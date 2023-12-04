@@ -17,7 +17,7 @@ public class FolderChooseDialog {
             return null;
         }
         if(!choice.isDirectory() || !choice.toPath().toAbsolutePath().startsWith(GAMES_FOLDER)) {
-            ErrorDialog.showAndWait("Directory could not be opened or is not inside Games folder");
+            Dialogs.showDialogAndWait(Alert.AlertType.ERROR, "Directory could not be opened or is not inside Games folder");
             return null;
         }
         return choice;

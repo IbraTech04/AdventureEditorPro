@@ -152,18 +152,10 @@ public class CreateGateController {
      */
     public void handleCreateButton(ActionEvent event) {
         if (gateDirection.getText().isEmpty()||(gateDirection.getText().equals("FORCED") && !isForced.isSelected())) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Invalid Gate");
-            alert.setContentText("Please enter a valid direction.");
-            alert.showAndWait();
+            Dialogs.showDialogAndWait(Alert.AlertType.ERROR, "Invalid gate. Please enter a valid direction.");
             throw new IllegalArgumentException("No direction entered");
         } else if (currentRoom.getEndStatus()){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Invalid Gate");
-            alert.setContentText("You cannot add a gate to an end room.");
-            alert.showAndWait();
+            Dialogs.showDialogAndWait(Alert.AlertType.ERROR, "Invalid gate. You can't add a gate to an end room.");
             throw new IllegalArgumentException("You can't add a gate to an end room");
         } else{
             if (this.chosenObject != null) {
