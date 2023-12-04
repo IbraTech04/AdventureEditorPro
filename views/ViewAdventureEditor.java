@@ -512,8 +512,13 @@ public class ViewAdventureEditor {
         for (AdventureObject o: objects){
             VBox objectBox = new VBox();
             //Create Image of Object
-            //TODO: Do this properly
-            Image image = new Image("assets/flower_icon.jpg");
+            Image image;
+            try {
+                image = new Image(Files.newInputStream(Path.of(controller.getDirectoryName(), "objectImages", o.getName() + ".jpg")));
+            } catch(IOException e) {
+                e.printStackTrace();
+                image = null;
+            }
             ImageView imageView = new ImageView(image);
             imageView.setFitHeight(100);
             imageView.setFitWidth(148);

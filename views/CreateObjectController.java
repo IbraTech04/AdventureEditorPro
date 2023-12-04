@@ -14,6 +14,9 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.Button;
 import javafx.stage.FileChooser;
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 /**
  * CreateObjectController Class
@@ -102,15 +105,28 @@ public class CreateObjectController {
         Stage stage = (Stage) addImageButton.getScene().getWindow();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select Image");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JPG files", "*.jpg"));
         imageFile = fileChooser.showOpenDialog(stage);
         if (imageFile != null) {
             objectImage = imageFile.getAbsolutePath();
-            if (objectImage.endsWith(".png") || objectImage.endsWith(".jpg")) {
-                Image roomImageFile = new Image("file:///" + objectImage);
+            if (objectImage.endsWith(".jpg")) {
+                Path imageDestinationPath = Path.of(mainController.getDirectoryName(), "objectImages", objectName + ".jpg");
+                Image roomImageFile;
+                try {
+                    try {
+                        Files.createDirectory(imageDestinationPath.getParent());
+                    } catch(IOException ignored) { // dir already exists
+                    }
+                    Files.copy(imageFile.toPath(), imageDestinationPath, StandardCopyOption.REPLACE_EXISTING);
+                    roomImageFile = new Image(Files.newInputStream(imageDestinationPath));
+                } catch (IOException e) {
+                    Dialogs.showDialogAndWait(Alert.AlertType.ERROR, "Error adding image", e.toString());
+                    roomImageFile = null;
+                }
                 objectImageView.setImage(roomImageFile);
                 objectImageView.setPreserveRatio(true);
             } else {
-                Dialogs.showDialogAndWait(Alert.AlertType.ERROR, "Invalid file type. Please select a .png or .jpg file.");
+                Dialogs.showDialogAndWait(Alert.AlertType.ERROR, "Invalid file type. Please select a .jpg file.");
                 throw new IllegalArgumentException("Invalid File Type");
             }
         }

@@ -50,6 +50,10 @@ public class Controller {
         return model.getRooms().values();
     }
 
+    public String getDirectoryName() {
+        return this.model.getDirectoryName();
+    }
+
     /**
      * getAllObjects
      *
