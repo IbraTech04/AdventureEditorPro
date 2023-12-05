@@ -113,10 +113,9 @@ public class CreateObjectController {
         if (imageFile != null) {
             objectImage = imageFile.getAbsolutePath();
             if (objectImage.endsWith(".jpg")) {
-                Path imageDestinationPath = Path.of(mainController.getDirectoryName(), "objectImages", objectName + ".jpg");
                 Image roomImageFile;
                 try {
-                    roomImageFile = ImageHelper.load(imageDestinationPath);
+                    roomImageFile = ImageHelper.load(imageFile.toPath());
                 } catch (IOException e) {
                     Dialogs.showDialogAndWait(Alert.AlertType.ERROR, "Error adding image", e.toString());
                     roomImageFile = null;
