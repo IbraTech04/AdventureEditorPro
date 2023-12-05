@@ -133,7 +133,9 @@ public class Controller {
             Dialogs.showDialogAndWait(Alert.AlertType.ERROR, "Error updating image", e.toString());
         }
 
-        view.updateRoomView();
+        if (sourcePath != null) {
+            view.updateRoomView();
+        }
     }
 
     /**
