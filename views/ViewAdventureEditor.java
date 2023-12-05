@@ -282,7 +282,7 @@ public class ViewAdventureEditor {
         Image defaultImageFile;
         try {
             File file = new File(model.getDirectoryName() + "/room-images/" + currentlySelectedRoom.getRoomNumber() + ".png");
-            defaultImageFile = new Image(new FileInputStream(file));
+            defaultImageFile = ImageHelper.load(file);
         } catch(RuntimeException | IOException e) { // image probably not found
             e.printStackTrace();
             defaultImageFile = null;
@@ -514,7 +514,7 @@ public class ViewAdventureEditor {
             //Create Image of Object
             Image image;
             try {
-                image = new Image(Files.newInputStream(Path.of(controller.getDirectoryName(), "objectImages", o.getName() + ".jpg")));
+                image = ImageHelper.load(Path.of(controller.getDirectoryName(), "objectImages", o.getName() + ".jpg"));
             } catch(IOException e) {
                 e.printStackTrace();
                 image = null;

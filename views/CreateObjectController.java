@@ -118,7 +118,7 @@ public class CreateObjectController {
                     } catch(IOException ignored) { // dir already exists
                     }
                     Files.copy(imageFile.toPath(), imageDestinationPath, StandardCopyOption.REPLACE_EXISTING);
-                    roomImageFile = new Image(Files.newInputStream(imageDestinationPath));
+                    roomImageFile = ImageHelper.load(imageDestinationPath);
                 } catch (IOException e) {
                     Dialogs.showDialogAndWait(Alert.AlertType.ERROR, "Error adding image", e.toString());
                     roomImageFile = null;
