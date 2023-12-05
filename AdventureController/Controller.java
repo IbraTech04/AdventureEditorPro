@@ -116,7 +116,7 @@ public class Controller {
      */
     public void updateImage(File selectedFile, Room room, String folder, String imagename) {
         String filePath = model.getDirectoryName();
-        Path sourcePath = selectedFile.toPath();
+        Path sourcePath = selectedFile != null ? selectedFile.toPath() : null;
         String desttofolder = filePath + File.separator + folder;
         Path destinationPath = Path.of(desttofolder + File.separator + imagename);
         try {
@@ -124,9 +124,13 @@ public class Controller {
                 Files.createDirectory(Path.of(desttofolder));
             } catch(IOException ignored) { // dir already exists
             }
-            Files.copy(sourcePath, destinationPath, StandardCopyOption.REPLACE_EXISTING);
+            if(sourcePath != null)
+                Files.copy(sourcePath, destinationPath, StandardCopyOption.REPLACE_EXISTING);
+            else {
+                Files.deleteIfExists(destinationPath);
+            }
         } catch (IOException e) {
-            Dialogs.showDialogAndWait(Alert.AlertType.ERROR, "Error adding image", e.toString());
+            Dialogs.showDialogAndWait(Alert.AlertType.ERROR, "Error updating image", e.toString());
         }
 
         view.updateRoomView();
@@ -183,6 +187,11 @@ public class Controller {
             }
             // Delete the room
             model.deleteRoom(room);
+            // Delete the image for the room
+            String dest = "room-images";
+            String name = room.getRoomNumber() + ".png";
+            updateImage(null, room, dest, name);
+            // Change currently selected room if needed
             if(view.getCurrentlySelectedRoom() == room) {
                 // Move to the first room in the list
                 view.setCurrentlySelectedRoom(getAllRooms().iterator().next());
