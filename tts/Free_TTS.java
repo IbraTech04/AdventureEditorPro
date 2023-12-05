@@ -11,7 +11,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Free_TTS implements TTS {
-    private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
+    private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor(runnable -> {
+        Thread t = new Thread(runnable, "Speech thread");
+        t.setDaemon(true);
+        return t;
+    });
 
     /**
      * VOICENAME_kevin
