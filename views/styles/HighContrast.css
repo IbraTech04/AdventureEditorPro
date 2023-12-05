@@ -58,6 +58,17 @@
     -fx-pref-height: 1;
     -fx-border-color: null
 }
+.choice-box {
+    -fx-background-color: -fx-button-colour;
+    -fx-border-color: -fx-border-colour;
+    -fx-text-fill: -fx-button-text-colour;
+}
+.choice-box:hover {
+    -fx-background-color: -fx-button-colour-highlight;
+}
+.choice-box .label {
+    -fx-text-fill: -fx-button-text-colour;
+}
 /* MENU BAR + Top-level MENU BUTTONS */
 .menu-bar {
     -fx-background-color: -fx-my-menu-color;

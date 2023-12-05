@@ -1,4 +1,4 @@
-package views;
+package AdventureController;
 import AdventureController.Controller;
 import AdventureModel.Room;
 import javafx.fxml.FXML;
@@ -13,6 +13,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.Button;
 import javafx.stage.FileChooser;
+import views.Dialogs;
+
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -139,8 +141,7 @@ public class CreateObjectController {
      * @param event The event
      * */
     public void handleCreateButton(ActionEvent event) {
-        String dest = "objectImages";
-        mainController.addObjectToRoom(currentRoom, objectName, objectDescription, imageFile, dest);
+        mainController.addObjectToRoom(currentRoom, objectName, objectDescription);
         Stage stage = (Stage) createButton.getScene().getWindow();
         stage.close();
     }

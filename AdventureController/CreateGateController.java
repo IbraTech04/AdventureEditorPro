@@ -1,4 +1,4 @@
-package views;
+package AdventureController;
 import AdventureController.Controller;
 import AdventureModel.AdventureObject;
 import AdventureModel.Room;
@@ -9,6 +9,7 @@ import java.util.Collection;
 import javafx.event.ActionEvent;
 import javafx.scene.control.ChoiceBox;
 import javafx.util.StringConverter;
+import views.Dialogs;
 
 
 /**
