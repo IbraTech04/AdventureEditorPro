@@ -454,7 +454,7 @@ public class ViewAdventureEditor {
      * Creates a mini gate view for the current room to another room.
      * @param gates the gates to create the view for (the keys are the gates, the values are the rooms)
      */
-    public Node createMiniGateView(Map<Connection, Room> gates) {
+    private Node createMiniGateView(Map<Connection, Room> gates) {
         VBox gateList = new VBox();
 
         Image trashIcon = new Image("assets/trash_icon.png");
@@ -513,7 +513,7 @@ public class ViewAdventureEditor {
     /**
      * createMiniObjectView
      */
-    public Node createMiniObjectView(Collection<AdventureObject> objects) {
+    private Node createMiniObjectView(Collection<AdventureObject> objects) {
         GridPane objectsGrid = new GridPane();
         GridPane.setRowSpan(objectsGrid, 3);
         //Create Column Constraints
