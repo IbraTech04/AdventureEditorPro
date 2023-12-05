@@ -14,6 +14,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.Button;
 import javafx.stage.FileChooser;
 import views.Dialogs;
+import views.ImageHelper;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -141,7 +142,7 @@ public class CreateObjectController {
      * @param event The event
      * */
     public void handleCreateButton(ActionEvent event) {
-        mainController.addObjectToRoom(currentRoom, objectName, objectDescription);
+        mainController.addObjectToRoom(currentRoom, objectName, objectDescription, imageFile, "objectImages");
         Stage stage = (Stage) createButton.getScene().getWindow();
         stage.close();
     }
