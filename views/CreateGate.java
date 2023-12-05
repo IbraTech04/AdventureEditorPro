@@ -1,5 +1,6 @@
 package views;
 import AdventureController.Controller;
+import AdventureController.CreateGateController;
 import AdventureModel.Room;
 import javafx.scene.Parent;
 import javafx.scene.Scene;

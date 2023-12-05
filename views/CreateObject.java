@@ -1,5 +1,6 @@
 package views;
 import AdventureController.Controller;
+import AdventureController.CreateObjectController;
 import AdventureModel.Room;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

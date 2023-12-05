@@ -98,10 +98,20 @@ public class ViewAdventureEditor {
         intiUI();
     }
 
+    /**
+     * getStage
+     * Gets the stage for this view
+     * @return the stage
+     */
     public Stage getStage() {
         return this.stage;
     }
 
+    /**
+     * setCurrentlySelectedRoom
+     * Sets the currently selected room
+     * @param room the room to set
+     */
     public void setCurrentlySelectedRoom(Room room) {
         currentlySelectedRoom = room;
         updateRoomView();
@@ -235,7 +245,10 @@ public class ViewAdventureEditor {
      */
     public void updateRoomView() {
         if(currentlySelectedRoom == null) {
-            this.layout.setCenter(null);
+            ImageView logo = new ImageView(new Image("assets/icon.png"));
+            logo.setFitWidth(500);
+            logo.setFitHeight(500);
+            this.layout.setCenter(logo);
             return;
         }
         //Create Text Box's (GridPane 1)
@@ -318,13 +331,6 @@ public class ViewAdventureEditor {
         endCheckBox.setOnAction(e -> handleEndCheckBox());
 
         //-------------------------------------------------------------------------------------------------------------
-        //Create Run Button
-        HBox runButtonBox = new HBox();
-        runButton = new Button("Run Game!");
-        runButton.setOnAction(e -> handleRun());
-        runButtonBox.getChildren().add(runButton);
-        runButtonBox.setAlignment(Pos.CENTER);
-        runButtonBox.setPadding(new Insets(10, 10, 10, 10));
 
         //Add all elements to GridPanes
         roomViewG1.add(nameLabel, 0, 0);
@@ -345,7 +351,6 @@ public class ViewAdventureEditor {
         roomView.add(roomViewG1, 0, 0);
         roomView.add(roomViewG2, 0, 1);
         roomView.add(roomViewG3, 0, 2);
-        roomView.add(runButtonBox, 0, 3);
         
         this.layout.setCenter(roomView);
 
@@ -360,6 +365,7 @@ public class ViewAdventureEditor {
     /**
      * updateAllRooms
      * Updates the allRooms ScrollPane anytime an edit is made, a room is added, or a room is deleted.
+     * @param rooms the rooms to update the view with
      */
     public void updateAllRooms(Collection<Room> rooms) {
         allRooms.setContent(createMiniRoomView(rooms));
@@ -368,6 +374,7 @@ public class ViewAdventureEditor {
     /**
      * updateAllGates
      * Updates the gatePane ScrollPane anytime an edit is made, a gate is added, or a gate is deleted.
+     * @param passages the gates to update the view with
      */
     public void updateAllGates(Map<Connection, Room> passages) {
         gatePane.setContent(createMiniGateView(passages));
@@ -376,6 +383,7 @@ public class ViewAdventureEditor {
     /**
      * updateAllObjects
      * Updates the gatePane ScrollPane anytime an edit is made, a gate is added, or a gate is deleted.
+     * @param objects the objects to update the view with
      */
     public void updateAllObjects(Collection<AdventureObject> objects){
         objectsPane.setContent(createMiniObjectView(objects));
@@ -388,6 +396,7 @@ public class ViewAdventureEditor {
     /**
      * createMiniRoomView
      * Creates a mini room view for the current room in the main room view.
+     * @param rooms the rooms to create the view for
      */
     private Node createMiniRoomView(Collection<Room> rooms) {
         VBox roomList = new VBox();
@@ -404,28 +413,31 @@ public class ViewAdventureEditor {
             Button deleteButton = new Button();
             deleteButton.setPrefWidth(30);
             deleteButton.setPrefHeight(80);
-            // TODO: change currently selected room upon deletion if needed
             deleteButton.setOnAction(e -> controller.deleteRoom(room));
             deleteButton.setGraphic(trashIconView);
 
 
             // Create Room Information Vbox
             VBox roomInfo = new VBox();
+            roomInfo.setStyle("-fx-background-color: #fefeff;");
             Label roomLabel = new Label(room.getRoomName());
+            roomLabel.setStyle("-fx-text-fill: #122435;");
             if (room.getEndStatus()){
                 Label endLabel = new Label("This is an End Room.");
+                endLabel.setStyle("-fx-text-fill: #122435;");
                 roomInfo.getChildren().addAll(roomLabel,endLabel);
             } else if (room.getStartStatus()){
                 Label startLabel = new Label("The Start Room.");
+                startLabel.setStyle("-fx-text-fill: #122435;");
                 roomInfo.getChildren().addAll(roomLabel,startLabel);
             } else {
                 roomInfo.getChildren().add(roomLabel);
             }
 
             roomInfo.setPrefHeight(80);
-            roomInfo.setPrefWidth(190);
+            roomInfo.setPrefWidth(185);
             roomInfo.setAlignment(Pos.CENTER);
-            roomInfo.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+            roomInfo.setBorder(new Border(new BorderStroke(Color.rgb(0, 45, 61), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
 
             roomInfo.setOnMouseClicked(e -> {
                 setCurrentlySelectedRoom(room);
@@ -443,6 +455,7 @@ public class ViewAdventureEditor {
     /**
      * createMiniGateView
      * Creates a mini gate view for the current room to another room.
+     * @param gates the gates to create the view for (the keys are the gates, the values are the rooms)
      */
     public Node createMiniGateView(Map<Connection, Room> gates) {
         VBox gateList = new VBox();
@@ -466,10 +479,13 @@ public class ViewAdventureEditor {
 
             // Create Gate Information Vbox
             VBox GateInfo = new VBox();
+            GateInfo.setStyle("-fx-background-color: #fefeff;");
             if (gates.get(gate) != null){
                 Label GateLabel = new Label(gate.direction() + " to " + gates.get(gate).getRoomName());
+                GateLabel.setStyle("-fx-text-fill: #122435;");
                 if (gate.lock() != null){
                     Label GateObject = new Label("With " + gate.lock());
+                    GateObject.setStyle("-fx-text-fill: #122435;");
                     GateInfo.getChildren().addAll(GateObject, GateLabel);
                 } else {
                     GateInfo.getChildren().add(GateLabel);
@@ -479,7 +495,7 @@ public class ViewAdventureEditor {
             }
 
             GateInfo.setPrefHeight(80);
-            GateInfo.setPrefWidth(245);
+            GateInfo.setPrefWidth(240);
             GateInfo.setAlignment(Pos.CENTER);
             GateInfo.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
 
@@ -511,6 +527,8 @@ public class ViewAdventureEditor {
 
         for (AdventureObject o: objects){
             VBox objectBox = new VBox();
+            objectBox.setStyle("-fx-background-color: #fefeff;");
+            objectBox.setBorder(new Border(new BorderStroke(Color.rgb(0, 45, 61), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
             //Create Image of Object
             Image image;
             try {
@@ -527,9 +545,9 @@ public class ViewAdventureEditor {
             HBox labelAndDelete = new HBox();
             labelAndDelete.setPrefWidth(148);
             Label objectLabel = new Label(o.getName());
+            objectLabel.setStyle("-fx-text-fill: #122435;");
             objectLabel.setPrefWidth(100);
             objectLabel.setPadding(new Insets(10, 10, 10, 10));
-            objectLabel.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
 
             //Create Delete Button
             ImageView trashIconView = new ImageView(trashIcon);
@@ -606,21 +624,7 @@ public class ViewAdventureEditor {
      * handleHelp
      */
     private void handleHelp() {
-        HelpView helpView = new HelpView();
-    }
-
-    /**
-     * handleVisualize
-     */
-    private void handleVisualize() {
-        System.out.println("Visualize Button Pressed");
-    }
-
-    /**
-     * handleRun
-     */
-    private void handleRun() {
-        System.out.println("Run Button Pressed");
+        new HelpView();
     }
 
     /**
@@ -640,7 +644,7 @@ public class ViewAdventureEditor {
     /**
      * handleAddImage
      */
-    private void handleAddImage() {//TODO: Do this properly
+    private void handleAddImage() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose Image File");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG files", "*.png"));
