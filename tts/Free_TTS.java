@@ -1,13 +1,18 @@
-package TTS;
-import com.sun.speech.freetts.FreeTTS;
+package tts;
 import com.sun.speech.freetts.Voice;
 import com.sun.speech.freetts.VoiceManager;
 import com.sun.speech.freetts.audio.AudioPlayer;
 import com.sun.speech.freetts.audio.SingleFileAudioPlayer;
 import javax.sound.sampled.AudioFileFormat.Type;
 import java.io.File;
+import java.time.Instant;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Free_TTS implements TTS {
+    private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
+
     /**
      * VOICENAME_kevin
      * __________________________
@@ -27,23 +32,28 @@ public class Free_TTS implements TTS {
     public Free_TTS() {
         this.voiceName = VOICENAME_kevin;
         this.voice = VoiceManager.getInstance().getVoice(this.voiceName);
-
+        this.voice.allocate();
     }
 
-    public void speak(String text) {
-        this.voice.allocate();
-        this.voice.speak(text);
-        this.voice.deallocate();
+    public CompletableFuture<Void> speak(String text) {
+        return CompletableFuture.runAsync(() -> {
+            this.voice.speak(text);
+        }, EXECUTOR);
     }
 
     public void createAudioFile(String text, String filename) {
-        this.voice.allocate();
         //create an audio player to dump the output file
         audioPlayer = new SingleFileAudioPlayer("Games"+sep+"TinyGame"+sep+"sounds"+sep+filename,Type.WAVE);
-        //attach the audio player
-        this.voice.setAudioPlayer(audioPlayer);
-        this.voice.speak(text);
-        this.voice.deallocate();
+        CompletableFuture.runAsync(() -> {
+            //attach the audio player
+            this.voice.setAudioPlayer(audioPlayer);
+            this.voice.speak(text);
+            try {
+                this.voice.setAudioPlayer(this.voice.getDefaultAudioPlayer());
+            } catch(InstantiationException e) {
+                throw new RuntimeException(e);
+            }
+        }, EXECUTOR).join();
         audioPlayer.close();
     }
     

@@ -1,6 +1,6 @@
 package views;
 
-import TTS.Free_TTS;
+import tts.Free_TTS;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
