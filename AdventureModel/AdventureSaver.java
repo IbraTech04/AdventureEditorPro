@@ -48,7 +48,9 @@ public class AdventureSaver {
             // write room description & separator
             // we remove the last newline to make it match the originally loaded file
             String desc = room.getUnsanitizedRoomDescription();
-            desc = desc.substring(0, desc.lastIndexOf('\n'));
+            if (!desc.isBlank()){
+                desc = desc.substring(0, desc.lastIndexOf('\n'));
+            }
             buff.write(desc);
             buff.write(AdventureLoader.DESCRIPTION_SEPARATOR + "\n");
 
