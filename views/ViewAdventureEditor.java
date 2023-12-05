@@ -653,7 +653,7 @@ public class ViewAdventureEditor {
             ImagePath = selectedFile.getAbsolutePath();
             String dest = "room-images";
             String name = currentlySelectedRoom.getRoomNumber() + ".png";
-            controller.updateImage(selectedFile, dest, name);
+            controller.updateImage(selectedFile, currentlySelectedRoom, dest, name);
         } else {
             Dialogs.showDialogAndWait(Alert.AlertType.ERROR, "Only .png files are accepted");
         }
