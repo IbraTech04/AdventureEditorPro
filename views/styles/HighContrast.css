@@ -1,16 +1,157 @@
+* {
+    -fx-my-menu-color: #fea350;
+    -fx-my-menu-color-highlighted: #fd823f;
+    -fx-my-menu-font-color: #122435;
+    -fx-my-menu-font-color-highlighted: #122435;
+    -fx-background-colour: #002d3d;
+    -fx-border-colour: #122435;
+    -fx-label-colour: #fefeff;
+    -fx-button-colour: #fea350;
+    -fx-button-colour-highlight: #fd823f;
+    -fx-button-text-colour: #122435;
+    -fx-scroll-color: #5bf6cc;
+}
 .root{
-    -fx-background-color: #f3dff1;
+    -fx-background-color: -fx-background-colour;
     -fx-font-size: 20px;
     -fx-font-style: italic;
 }
-.button{
-    -fx-background-color: #cf9fca;
-    -fx-background-radius: 0
-}
-.scroll-pane{
-    -fx-background-color: #b96270;
-}
 .text-field{
-    -fx-border-color: #b96270;
+    -fx-border-color: transparent;
+    -fx-text-fill: -fx-button-text-colour;
 }
-.
+.text-area{
+    -fx-border-color: transparent;
+    -fx-text-fill: -fx-button-text-colour;
+}
+.text-area .scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+.button{
+    -fx-background-color: -fx-button-colour;
+    -fx-background-radius: 0;
+    -fx-border-thickness: 5;
+    -fx-border-color: -fx-border-colour;
+    -fx-text-fill: -fx-button-text-colour;
+}
+.button:hover{
+    -fx-background-color: -fx-button-colour-highlight;
+}
+.label{
+    -fx-text-fill: -fx-label-colour;
+}
+.check-box{
+    -fx-text-fill: -fx-label-colour;
+}
+.menu-button {
+    -fx-background-color: -fx-my-menu-color;
+    -fx-mark-color: -fx-background-colour;
+}
+.menu-button > .label {
+    -fx-text-fill: -fx-my-menu-font-color;
+}
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+.separator > .line{
+    -fx-background-color: -fx-my-menu-font-color;
+    -fx-pref-height: 1;
+    -fx-border-color: null
+}
+/* MENU BAR + Top-level MENU BUTTONS */
+.menu-bar {
+    -fx-background-color: -fx-my-menu-color;
+}
+.menu-bar > .container > .menu-button {
+    -fx-background-color: -fx-my-menu-color;
+}
+
+.menu-bar > .container > .menu-button > .label {
+    -fx-text-fill: -fx-my-menu-font-color;
+}
+
+.menu-bar > .container > .menu-button > .label:disabled {
+    -fx-opacity: 1.0;
+}
+
+.menu-bar > .container > .menu-button:hover,
+.menu-bar > .container > .menu-button:focused,
+.menu-bar > .container > .menu-button:showing {
+    -fx-background-color: -fx-my-menu-color-highlighted;
+}
+
+.menu-bar > .container > .menu-button:hover > .label,
+.menu-bar > .container > .menu-button:focused > .label,
+.menu-bar > .container > .menu-button:showing > .label {
+    -fx-text-fill: -fx-my-menu-font-color-highlighted;
+}
+
+.menu-item {
+    -fx-background-color: -fx-my-menu-color;
+}
+
+.menu-item .label {
+    -fx-text-fill: -fx-my-menu-font-color;
+}
+
+.menu-item .label:disabled {
+    -fx-opacity: 1.0;
+}
+
+.menu-item:focused, .menu-item:focused {
+    -fx-background-color: -fx-my-menu-color-highlighted;
+}
+
+.menu-item:focused .label, .menu-item:focused .label {
+    -fx-text-fill: -fx-my-menu-font-color-highlighted;
+}
+
+.context-menu {
+    -fx-background-color: -fx-my-menu-color;
+}
+
+/* SCROLL PANE */
+
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:horizontal, .scroll-bar:vertical{
+    -fx-background-color:transparent;
+}
+
+.increment-button, .decrement-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.scroll-bar:horizontal .track,
+.scroll-bar:vertical .track{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0em;
+}
+
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+    -fx-background-color: -fx-scroll-color;
+    -fx-background-radius: 5em;
+}
+
+.scroll-pane > .corner {
+    -fx-background-color: transparent;
+}
+
+/* TEXT BOX */
+
+.check-box .box {
+    -fx-background-color: -fx-button-colour;
+}
+
+.check-box:selected .mark {
+    -fx-background-color: -fx-button-text-colour;
+}
+
+.check-box:selected .box {
+    -fx-background-color: -fx-button-colour-highlight;
+}
