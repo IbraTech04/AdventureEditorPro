@@ -116,11 +116,6 @@ public class CreateObjectController {
                 Path imageDestinationPath = Path.of(mainController.getDirectoryName(), "objectImages", objectName + ".jpg");
                 Image roomImageFile;
                 try {
-                    try {
-                        Files.createDirectory(imageDestinationPath.getParent());
-                    } catch(IOException ignored) { // dir already exists
-                    }
-                    Files.copy(imageFile.toPath(), imageDestinationPath, StandardCopyOption.REPLACE_EXISTING);
                     roomImageFile = ImageHelper.load(imageDestinationPath);
                 } catch (IOException e) {
                     Dialogs.showDialogAndWait(Alert.AlertType.ERROR, "Error adding image", e.toString());
@@ -130,6 +125,7 @@ public class CreateObjectController {
                 objectImageView.setPreserveRatio(true);
             } else {
                 Dialogs.showDialogAndWait(Alert.AlertType.ERROR, "Invalid file type. Please select a .jpg file.");
+                imageFile = null;
                 throw new IllegalArgumentException("Invalid File Type");
             }
         }
