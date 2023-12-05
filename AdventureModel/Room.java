@@ -121,13 +121,6 @@ public class Room {
     }
 
     /**
-     * Sets the visit status of the room to true.
-     */
-    public void visit(){
-        isVisited = true;
-    }
-
-    /**
      * Getter for returning an AdventureObject with a given name
      *
      * @param objectName: Object name to find in the room
@@ -147,15 +140,6 @@ public class Room {
      */
     public int getRoomNumber(){
         return this.roomNumber;
-    }
-
-    /**
-     * Getter method for the description attribute.
-     *
-     * @return description of the room
-     */
-    public String getRoomDescription(){
-        return this.roomDescription.replace("\n", " ");
     }
 
     /**
@@ -189,15 +173,6 @@ public class Room {
      * @return start status of the room
      */
     public boolean getStartStatus() {return this.roomNumber == 1;}
-
-    /**
-     * Getter method for the visit attribute.
-     *
-     * @return visit status of the room
-     */
-    public boolean getVisited(){
-        return this.isVisited;
-    }
 
     /**
      * Getter method for the passages attribute.
@@ -244,16 +219,6 @@ public class Room {
      */
     public void addGate(String direction, String object, Room room) {
         this.passages.put(new Connection(direction, object), room);
-    }
-
-    /**
-     * Deletes a gate from the room.
-     *
-     * @param direction: direction of the gate
-     * @param object: lock for the gate
-     */
-    public void deleteGate(String direction, String object) {
-        this.passages.remove(new Connection(direction, object));
     }
 
     /**

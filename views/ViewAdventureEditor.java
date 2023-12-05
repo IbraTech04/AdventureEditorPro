@@ -49,10 +49,11 @@ public class ViewAdventureEditor {
      * The layout of the game.
      */
     BorderPane layout;
-    /**
-     * The buttons for the game.
-     */
-    Button runButton, addGateButton, addObjectButton, addRoomButton, imageButton, visualizeButton;
+    Button addGateButton;
+    Button addObjectButton;
+    Button addRoomButton;
+    Button imageButton;
+    Button visualizeButton;
     /**
      * The labels for the game.
      */
@@ -69,10 +70,6 @@ public class ViewAdventureEditor {
      * The checkboxes for the room.
      */
     CheckBox endCheckBox;
-    /**
-     * The image paths for the room.
-     */
-    String ImagePath;
     /**
      * The image view for the room.
      */
@@ -650,7 +647,6 @@ public class ViewAdventureEditor {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG files", "*.png"));
         File selectedFile = fileChooser.showOpenDialog(stage);
         if (selectedFile != null && selectedFile.getName().endsWith(".png")) {
-            ImagePath = selectedFile.getAbsolutePath();
             String dest = "room-images";
             String name = currentlySelectedRoom.getRoomNumber() + ".png";
             controller.updateImage(selectedFile, currentlySelectedRoom, dest, name);

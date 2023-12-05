@@ -57,15 +57,4 @@ public class AdventureObject implements Serializable {
         return this.description;
     }
 
-    /**
-     * This method returns the location of the object if the object is still in
-     * the room. If the object has been pickUp up by the player, it returns null.
-     *
-     * @return returns the location of the object if the objects is still in
-     * the room otherwise, returns null.
-     */
-    public Room getLocation(){
-        return this.location;
-    }
-
 }

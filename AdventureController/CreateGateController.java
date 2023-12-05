@@ -1,5 +1,4 @@
 package AdventureController;
-import AdventureController.Controller;
 import AdventureModel.AdventureObject;
 import AdventureModel.Room;
 import javafx.fxml.FXML;
@@ -38,14 +37,6 @@ public class CreateGateController {
      *The chosen room
      */
     Room chosenRoom;
-    /**
-     *The rooms in the game.
-     */
-    Collection<Room> rooms;
-    /**
-     *The objects in the game.
-     */
-    Collection<AdventureObject> objects;
 
     @FXML
     private ChoiceBox<Room> listRooms;
@@ -71,7 +62,6 @@ public class CreateGateController {
      * @param rooms the rooms in the game
      */
     public void setRoomList(Collection<Room> rooms) {
-        this.rooms = rooms;
         listRooms.getItems().addAll(rooms);
         listRooms.setConverter(new StringConverter<>() {
             @Override
@@ -100,7 +90,6 @@ public class CreateGateController {
      * @param objects the objects in the game
      */
     public void setObjectList(Collection<AdventureObject> objects) {
-        this.objects = objects;
         listObjects.getItems().add(new AdventureObject("None", null, null));
         listObjects.getItems().addAll(objects);
         listObjects.setConverter(new StringConverter<>() {
