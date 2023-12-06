@@ -134,52 +134,6 @@ public class AdventureGame implements Serializable {
     }
 
     /**
-     * interpretAction
-     * interpret the user's action.
-     *
-     * @param command String representation of the command.
-     */
-    public String interpretAction(String command){
-
-        String[] inputArray = tokenize(command); //look up synonyms
-
-        var room = this.player.getCurrentRoom(); //where can we move?
-
-        if (room.getAllDirections().contains(inputArray[0])) {
-            if (!movePlayer(inputArray[0])) {
-                // null destination = room 0, i.e. dead
-                if (this.player.getCurrentRoom().getPassages().entrySet().iterator().next() == null)
-                    return "GAME OVER";
-                else return "FORCED";
-            } //something is up here! We are dead or we won.
-            return null;
-        } else if(Arrays.asList(this.actionVerbs).contains(inputArray[0])) {
-            if(inputArray[0].equals("QUIT")) { return "GAME OVER"; } //time to stop!
-            else if(inputArray[0].equals("INVENTORY") && this.player.getInventory().size() == 0) return "INVENTORY IS EMPTY";
-            else if(inputArray[0].equals("INVENTORY") && this.player.getInventory().size() > 0) return "THESE OBJECTS ARE IN YOUR INVENTORY:\n" + this.player.getInventory().toString();
-            else if(inputArray[0].equals("TAKE") && inputArray.length < 2) return "THE TAKE COMMAND REQUIRES AN OBJECT";
-            else if(inputArray[0].equals("DROP") && inputArray.length < 2) return "THE DROP COMMAND REQUIRES AN OBJECT";
-            else if(inputArray[0].equals("TAKE") && inputArray.length == 2) {
-                if(this.player.getCurrentRoom().checkIfObjectInRoom(inputArray[1])) {
-                    this.player.takeObject(inputArray[1]);
-                    return "YOU HAVE TAKEN:\n " + inputArray[1];
-                } else {
-                    return "THIS OBJECT IS NOT HERE:\n " + inputArray[1];
-                }
-            }
-            else if(inputArray[0].equals("DROP") && inputArray.length == 2) {
-                if(this.player.checkIfObjectInInventory(inputArray[1])) {
-                    this.player.dropObject(inputArray[1]);
-                    return "YOU HAVE DROPPED:\n " + inputArray[1];
-                } else {
-                    return "THIS OBJECT IS NOT IN YOUR INVENTORY:\n " + inputArray[1];
-                }
-            }
-        }
-        return "INVALID COMMAND.";
-    }
-
-    /**
      * getDirectoryName
      * __________________________
      * Getter method for directory 
@@ -197,15 +151,6 @@ public class AdventureGame implements Serializable {
      */
     public String getInstructions() {
         return helpText;
-    }
-
-    /**
-     * getPlayer
-     * __________________________
-     * Getter method for Player 
-     */
-    public Player getPlayer() {
-        return this.player;
     }
 
     /**

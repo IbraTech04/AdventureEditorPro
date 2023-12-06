@@ -45,22 +45,5 @@ public class Free_TTS implements TTS {
         }, EXECUTOR);
     }
 
-    public void createAudioFile(String text, String filename) {
-        //create an audio player to dump the output file
-        audioPlayer = new SingleFileAudioPlayer("Games"+sep+"TinyGame"+sep+"sounds"+sep+filename,Type.WAVE);
-        CompletableFuture.runAsync(() -> {
-            //attach the audio player
-            this.voice.setAudioPlayer(audioPlayer);
-            this.voice.speak(text);
-            try {
-                this.voice.setAudioPlayer(this.voice.getDefaultAudioPlayer());
-            } catch(InstantiationException e) {
-                throw new RuntimeException(e);
-            }
-        }, EXECUTOR).join();
-        audioPlayer.close();
-    }
-    
-
 
 }

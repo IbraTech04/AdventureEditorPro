@@ -263,7 +263,7 @@ public class Controller {
         //TODO: Add code here to add the object image to the image folder
         AdventureObject newObject = new AdventureObject(objectName, objectDescription, room);
         room.addGameObject(newObject);
-        updateImage(imageFile, room, dest, objectName);
+        updateImage(imageFile, room, dest, objectName + ".jpg");
         view.updateAllObjects(room.getObjectsInRoom());
     }
 
